@@ -7,6 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum BudgetStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum RoleType {
+  ADMIN
+  MANAGER
+  USER
+  FINANCE
+  AUDITOR
+}
+
 model User {
   id            String    @id @default(uuid())
   createdAt     DateTime  @default(now()) @map("created_at")
@@ -34,9 +54,35 @@ model Role {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users User[]
+  users       User[]
+  permissions RolePermission[]
 
   @@map("roles")
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  rolePermissions RolePermission[]
+
+  @@map("permissions")
+}
+
+model RolePermission {
+  id           String   @id @default(uuid())
+  roleId       String
+  permissionId String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@map("role_permissions")
 }
 
 model Plan {
@@ -57,7 +103,7 @@ model Budget {
   updatedAt   DateTime     @updatedAt @map("updated_at")
   title       String
   description String?
-  status      String
+  status      BudgetStatus @default(PENDING)
   userId      String
   user        User         @relation(fields: [userId], references: [id])
   items       BudgetItem[]
@@ -101,32 +147,19 @@ model Category {
 }
 
 model Payment {
-  id           String        @id @default(uuid())
-  createdAt    DateTime      @default(now()) @map("created_at")
-  updatedAt    DateTime      @updatedAt @map("updated_at")
-  amount       Float
-  status       String
-  paymentDate  DateTime
-  userId       String
-  user         User          @relation(fields: [userId], references: [id])
-  budgetId     String
-  budget       Budget        @relation(fields: [budgetId], references: [id])
-  transactions Transaction[]
+  id               String        @id @default(uuid())
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+  amount           Float
+  status           PaymentStatus @default(PENDING)
+  userId           String
+  user             User          @relation(fields: [userId], references: [id])
+  budgetId         String
+  budget           Budget        @relation(fields: [budgetId], references: [id])
+  gatewayReference String?       @map("gateway_reference")
+  gatewayStatus    String?       @map("gateway_status")
 
   @@map("payments")
-}
-
-model Transaction {
-  id              String   @id @default(uuid())
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
-  amount          Float
-  status          String
-  transactionDate DateTime
-  paymentId       String
-  payment         Payment  @relation(fields: [paymentId], references: [id])
-
-  @@map("transactions")
 }
 
 model AuditLog {

@@ -3,7 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: bitnami/postgresql:latest
-    container_name: postgres_container
+    container_name: postgres_container_quoth
     environment:
       - POSTGRESQL_USERNAME=quoth
       - POSTGRESQL_PASSWORD=quoth@2024
