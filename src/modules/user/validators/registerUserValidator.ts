@@ -1,3 +1,4 @@
+import { RoleType } from '@prisma/client';
 import { z } from 'zod';
 
 const userValidationSchema = z.object({
@@ -16,10 +17,10 @@ const userValidationSchema = z.object({
     .max(255, 'Password can be at most 255 characters long.'),
   roleId: z.string().uuid('Invalid UUID format for role ID.'),
   isActive: z.boolean().default(true),
-  // role: z.nativeEnum(Role, {
-  //   required_error: 'Role is required.',
-  //   invalid_type_error: 'Invalid role type.',
-  // }),
+  role: z.nativeEnum(RoleType, {
+    required_error: 'Role is required.',
+    invalid_type_error: 'Invalid role type.',
+  }),
 });
 
 export default userValidationSchema;

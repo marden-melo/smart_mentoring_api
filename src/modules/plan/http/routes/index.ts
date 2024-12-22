@@ -22,10 +22,6 @@ export async function plansRoutes(app: FastifyInstance) {
           required: ['name', 'price'],
           properties: {
             name: { type: 'string', description: 'Name of the plan' },
-            description: {
-              type: 'string',
-              description: 'Name of the plan',
-            },
             price: { type: 'number', description: 'Price of the plan' },
           },
         },
@@ -59,13 +55,18 @@ export async function plansRoutes(app: FastifyInstance) {
       schema: {
         description: 'Retrieve all plans with pagination',
         tags: ['Plans'],
-        querystring: {
-          type: 'object',
-          properties: {
-            page: { type: 'integer', default: 1 },
-            limit: { type: 'integer', default: 10 },
+        parameters: [
+          {
+            in: 'query',
+            name: 'page',
+            schema: { type: 'integer', default: 1 },
           },
-        },
+          {
+            in: 'query',
+            name: 'limit',
+            schema: { type: 'integer', default: 10 },
+          },
+        ],
         response: {
           200: {
             description: 'List of all Plans',
@@ -76,7 +77,7 @@ export async function plansRoutes(app: FastifyInstance) {
               totalPages: { type: 'integer' },
               data: {
                 type: 'array',
-                plans: {
+                items: {
                   type: 'object',
                   properties: {
                     id: { type: 'string' },
@@ -99,7 +100,7 @@ export async function plansRoutes(app: FastifyInstance) {
     '/plan/:id',
     {
       schema: {
-        description: 'Retrieve an plan by ID',
+        description: 'Retrieve a plan by ID',
         tags: ['Plans'],
         params: {
           type: 'object',
@@ -141,7 +142,7 @@ export async function plansRoutes(app: FastifyInstance) {
     '/plan/:id',
     {
       schema: {
-        description: 'Update an plan by ID',
+        description: 'Update a plan by ID',
         tags: ['Plans'],
         params: {
           type: 'object',
@@ -191,7 +192,7 @@ export async function plansRoutes(app: FastifyInstance) {
     '/plan/:id',
     {
       schema: {
-        description: 'Delete an plan by ID',
+        description: 'Delete a plan by ID',
         tags: ['Plans'],
         params: {
           type: 'object',

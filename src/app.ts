@@ -7,6 +7,7 @@ import path from 'path';
 import { env } from './env';
 import { usersRoutes } from './modules/user/http/routes';
 import { plansRoutes } from './modules/plan/http/routes';
+import { rolesRoutes } from './modules/role/http/routes';
 
 export const app = fastify();
 
@@ -23,7 +24,8 @@ app.register(swagger, {
     produces: ['application/json'],
     tags: [
       { name: 'Users', description: 'User related endpoints' },
-      { name: 'Plan', description: 'Plan related endpoints' },
+      { name: 'Plans', description: 'Plan related endpoints' },
+      { name: 'Role', description: 'Role related endpoints' },
     ],
   },
 });
@@ -41,6 +43,7 @@ app.ready((err) => {
 
 app.register(usersRoutes);
 app.register(plansRoutes);
+app.register(rolesRoutes);
 
 app.setErrorHandler((error, request, reply) => {
   if (error instanceof ZodError) {

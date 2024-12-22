@@ -3,8 +3,8 @@ import { hash } from 'bcryptjs';
 import { UsersRepository } from '../repositories/prisma/userRepository';
 import { UserAlreadyExistsError } from '@/utils/errors/userAlreadyExistsError';
 import { CreateUserDTO } from '../dtos/usersDTO';
-import { RoleRepository } from '../repositories/prisma/roleRepository';
-import { PlanRepository } from '../repositories/prisma/planRepository';
+import { RoleRepository } from '@/modules/role/repositories/prisma/roleRepository';
+import { PlanRepository } from '@/modules/plan/repositories/prisma/planRepository';
 
 @injectable()
 export class RegisterUsersUseCase {
