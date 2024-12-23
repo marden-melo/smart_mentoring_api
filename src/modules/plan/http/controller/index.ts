@@ -126,7 +126,7 @@ export async function updatePlanController(
 
     reply
       .status(200)
-      .send({ message: 'User updated successfully', data: updatedPlan });
+      .send({ message: 'Plan updated successfully', data: updatedPlan });
   } catch (e) {
     console.error('Error caught:', e);
     if (e instanceof ResourceNotFoundError) {

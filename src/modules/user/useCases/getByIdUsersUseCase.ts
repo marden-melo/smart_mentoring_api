@@ -1,6 +1,6 @@
 // getByIdUsersUseCase.ts
 import { injectable, inject } from 'tsyringe';
-import { UsersRepository } from '../repositories/prisma/userRepository';
+import { UsersRepository } from '../repositories/prisma/usersRepository';
 import { UserNotFoundError } from '@/utils/errors/userNotFoundError';
 import { UserDTO } from '../dtos/usersDTO';
 

@@ -1,78 +1,80 @@
 import { FastifyInstance } from 'fastify';
 import { verifyJwt } from '@/utils/middlewares/verify-jwt';
 import {
-  createRolesController,
-  deleteRoleController,
-  getAllRolesController,
-  getRoleByIdController,
-  updateRoleController,
+  createPermissionsController,
+  deletePermissionController,
+  getAllPermissionsController,
+  getPermissionByIdController,
+  updatePermissionController,
 } from '../controller';
 
-export async function rolesRoutes(app: FastifyInstance) {
+export async function permissionRoutes(app: FastifyInstance) {
   app.addSchema({
-    $id: 'Role',
+    $id: 'Permission',
     type: 'object',
     properties: {
       id: { type: 'string' },
       name: { type: 'string' },
+      description: { type: 'string' },
     },
-    required: ['id', 'name'],
+    required: ['id', 'name', 'description'],
   });
 
   // app.addHook('onRequest', verifyJwt);
 
   app.post(
-    '/roles',
+    '/permissions',
     {
       schema: {
-        description: 'Create a new role',
-        tags: ['Role'],
+        description: 'Create a new permission',
+        tags: ['Permission'],
         body: {
           type: 'object',
           properties: {
             name: { type: 'string' },
+            description: { type: 'string' },
           },
-          required: ['name'],
+          required: ['name', 'description'],
         },
         response: {
           201: {
-            description: 'Role created successfully',
+            description: 'Permission created successfully',
             type: 'object',
             properties: {
               message: { type: 'string' },
-              data: { $ref: 'Role#' },
+              data: { $ref: 'Permission#' },
             },
           },
         },
       },
     },
-    createRolesController,
+    createPermissionsController,
   );
 
   app.get(
-    '/roles',
+    '/permissions',
     {
       schema: {
-        description: 'Get all roles',
-        tags: ['Role'],
+        description: 'Get all permissions',
+        tags: ['Permission'],
         response: {
           200: {
-            description: 'List of all roles',
+            description: 'List of all permissions',
             type: 'array',
-            items: { $ref: 'Role#' },
+            items: { $ref: 'Permission#' },
           },
         },
       },
     },
-    getAllRolesController,
+    getAllPermissionsController,
   );
 
   app.get(
-    '/roles/:id',
+    '/permissions/:id',
     {
       schema: {
-        description: 'Get role by ID',
-        tags: ['Role'],
+        description: 'Get permission by ID',
+        tags: ['Permission'],
         params: {
           type: 'object',
           properties: {
@@ -82,14 +84,14 @@ export async function rolesRoutes(app: FastifyInstance) {
         },
         response: {
           200: {
-            description: 'Role found by ID',
+            description: 'Permission found by ID',
             type: 'object',
             properties: {
-              data: { $ref: 'Role#' },
+              data: { $ref: 'Permission#' },
             },
           },
           409: {
-            description: 'Role not found',
+            description: 'Permission not found',
             type: 'object',
             properties: {
               message: { type: 'string' },
@@ -98,15 +100,15 @@ export async function rolesRoutes(app: FastifyInstance) {
         },
       },
     },
-    getRoleByIdController,
+    getPermissionByIdController,
   );
 
   app.delete(
-    '/roles/:id',
+    '/permissions/:id',
     {
       schema: {
-        description: 'Delete a role',
-        tags: ['Role'],
+        description: 'Delete a permission',
+        tags: ['Permission'],
         params: {
           type: 'object',
           properties: {
@@ -116,7 +118,7 @@ export async function rolesRoutes(app: FastifyInstance) {
         },
         response: {
           200: {
-            description: 'Role deleted successfully',
+            description: 'Permission deleted successfully',
             type: 'object',
             properties: {
               message: { type: 'string' },
@@ -125,15 +127,15 @@ export async function rolesRoutes(app: FastifyInstance) {
         },
       },
     },
-    deleteRoleController,
+    deletePermissionController,
   );
 
   app.put(
-    '/roles/:id',
+    '/permissions/:id',
     {
       schema: {
-        description: 'Update a role',
-        tags: ['Role'],
+        description: 'Update a permission',
+        tags: ['Permission'],
         params: {
           type: 'object',
           properties: {
@@ -145,21 +147,22 @@ export async function rolesRoutes(app: FastifyInstance) {
           type: 'object',
           properties: {
             name: { type: 'string' },
+            description: { type: 'string' },
           },
-          required: ['name'],
+          required: ['name', 'description'],
         },
         response: {
           200: {
-            description: 'Role updated successfully',
+            description: 'Permission updated successfully',
             type: 'object',
             properties: {
               message: { type: 'string' },
-              data: { $ref: 'Role#' },
+              data: { $ref: 'Permission#' },
             },
           },
         },
       },
     },
-    updateRoleController,
+    updatePermissionController,
   );
 }

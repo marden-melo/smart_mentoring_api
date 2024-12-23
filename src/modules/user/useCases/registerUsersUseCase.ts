@@ -1,6 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 import { hash } from 'bcryptjs';
-import { UsersRepository } from '../repositories/prisma/userRepository';
+import { UsersRepository } from '../repositories/prisma/usersRepository';
 import { UserAlreadyExistsError } from '@/utils/errors/userAlreadyExistsError';
 import { CreateUserDTO } from '../dtos/usersDTO';
 import { RoleRepository } from '@/modules/role/repositories/prisma/roleRepository';

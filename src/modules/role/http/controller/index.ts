@@ -112,7 +112,7 @@ export async function updateRoleController(
 
     reply
       .status(200)
-      .send({ message: 'User updated successfully', data: updatedRole });
+      .send({ message: 'Role updated successfully', data: updatedRole });
   } catch (e) {
     console.error('Error caught:', e);
     if (e instanceof ResourceNotFoundError) {

@@ -1,5 +1,5 @@
 import { injectable, inject } from 'tsyringe';
-import { UsersRepository } from '../repositories/prisma/userRepository';
+import { UsersRepository } from '../repositories/prisma/usersRepository';
 import { User } from '@prisma/client';
 
 @injectable()

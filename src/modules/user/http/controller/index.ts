@@ -131,20 +131,20 @@ export async function deleteUserController(
   }
 }
 
-export async function profileController(
-  request: FastifyRequest,
-  reply: FastifyReply,
-) {
-  const getUserProfile = container.resolve(GetUserProfileUseCase);
+// export async function profileController(
+//   request: FastifyRequest,
+//   reply: FastifyReply,
+// ) {
+//   const getUserProfile = container.resolve(GetUserProfileUseCase);
 
-  const { user } = await getUserProfile.execute({
-    userId: request.user.sub,
-  });
+//   const { user } = await getUserProfile.execute({
+//     userId: request.user.sub,
+//   });
 
-  return reply.status(200).send({
-    user: {
-      ...user,
-      password_hash: undefined,
-    },
-  });
-}
+//   return reply.status(200).send({
+//     user: {
+//       ...user,
+//       password_hash: undefined,
+//     },
+//   });
+// }

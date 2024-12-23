@@ -21,6 +21,26 @@
         "name"
       ],
       "title": "Role"
+    },
+    "def-1": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "description"
+      ],
+      "title": "Permission"
     }
   },
   "paths": {
@@ -913,6 +933,491 @@
           }
         }
       }
+    },
+    "/permissions": {
+      "post": {
+        "description": "Create a new permission",
+        "tags": [
+          "Permission"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "description"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Permission created successfully",
+            "schema": {
+              "description": "Permission created successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/def-1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Get all permissions",
+        "tags": [
+          "Permission"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all permissions",
+            "schema": {
+              "description": "List of all permissions",
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/def-1"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/permissions/{id}": {
+      "get": {
+        "description": "Get permission by ID",
+        "tags": [
+          "Permission"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permission found by ID",
+            "schema": {
+              "description": "Permission found by ID",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/def-1"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Permission not found",
+            "schema": {
+              "description": "Permission not found",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a permission",
+        "tags": [
+          "Permission"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permission deleted successfully",
+            "schema": {
+              "description": "Permission deleted successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update a permission",
+        "tags": [
+          "Permission"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name",
+                "description"
+              ]
+            }
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permission updated successfully",
+            "schema": {
+              "description": "Permission updated successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/def-1"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role-permission": {
+      "post": {
+        "description": "Create a new Role Permission",
+        "tags": [
+          "Role Permissions"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": [
+                "roleId",
+                "permissionId"
+              ],
+              "properties": {
+                "roleId": {
+                  "type": "string",
+                  "description": "Role ID"
+                },
+                "permissionId": {
+                  "type": "string",
+                  "description": "Permission ID"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Role Permission created successfully",
+            "schema": {
+              "description": "Role Permission created successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "roleId": {
+                      "type": "string"
+                    },
+                    "permissionId": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role-permissions": {
+      "get": {
+        "description": "Retrieve all role permissions with pagination",
+        "tags": [
+          "Role Permissions"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all Role Permissions",
+            "schema": {
+              "description": "List of all Role Permissions",
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "integer"
+                },
+                "currentPage": {
+                  "type": "integer"
+                },
+                "totalPages": {
+                  "type": "integer"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "roleId": {
+                        "type": "string"
+                      },
+                      "permissionId": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/role-permission/{id}": {
+      "get": {
+        "description": "Retrieve a role permission by ID",
+        "tags": [
+          "Role Permissions"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Role Permission ID",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role Permission data",
+            "schema": {
+              "description": "Role Permission data",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "roleId": {
+                      "type": "string"
+                    },
+                    "permissionId": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Role Permission not found",
+            "schema": {
+              "description": "Role Permission not found",
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update a role permission by ID",
+        "tags": [
+          "Role Permissions"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "roleId": {
+                  "type": "string"
+                },
+                "permissionId": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "type": "string",
+            "description": "Role Permission ID",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role Permission updated successfully",
+            "schema": {
+              "description": "Role Permission updated successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "roleId": {
+                      "type": "string"
+                    },
+                    "permissionId": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Role Permission not found",
+            "schema": {
+              "description": "Role Permission not found",
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a role permission by ID",
+        "tags": [
+          "Role Permissions"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Role Permission ID",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Role Permission deleted successfully",
+            "schema": {
+              "description": "Role Permission deleted successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Role Permission not found",
+            "schema": {
+              "description": "Role Permission not found",
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "host": "localhost:3333",
@@ -937,6 +1442,14 @@
     {
       "name": "Role",
       "description": "Role related endpoints"
+    },
+    {
+      "name": "Permission",
+      "description": "Permission related endpoints"
+    },
+    {
+      "name": "Role Permissions",
+      "description": "Role Permissions related endpoints"
     }
   ]
 }

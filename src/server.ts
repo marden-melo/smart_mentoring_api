@@ -1,4 +1,6 @@
 import 'reflect-metadata';
+import './utils/container';
+
 import { app } from './app';
 import { env } from './env';
 
