@@ -27,6 +27,11 @@ enum RoleType {
   AUDITOR
 }
 
+enum ClientType {
+  COMPANY
+  INDIVIDUAL
+}
+
 model User {
   id            String    @id @default(uuid())
   createdAt     DateTime  @default(now()) @map("created_at")
@@ -95,6 +100,28 @@ model Plan {
   users User[]
 
   @@map("plans")
+}
+
+model Client {
+  id          String     @id @default(uuid())
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+  clientType  ClientType
+  cnpj        String?    @unique
+  companyName String?    @map("company_name")
+  cpf         String?    @unique
+  fullName    String?    @map("full_name")
+  phone       String
+  email       String     @unique
+  street      String?
+  district    String?
+  city        String?
+  number      String?
+  state       String?
+  cep         String?
+  responsable String?
+
+  @@map("clients")
 }
 
 model Budget {
