@@ -42,9 +42,7 @@ export async function getAllRolesController(
     const getAllRolesUseCase = container.resolve(GetAllRolesUseCase);
     const { data: roles } = await getAllRolesUseCase.execute();
 
-    reply.status(200).send({
-      data: roles,
-    });
+    reply.status(200).send(roles);
   } catch (e) {
     console.error('Error caught:', e);
     const error = e as Error;

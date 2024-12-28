@@ -45,9 +45,7 @@ export async function getAllPermissionsController(
     );
     const { data: permissions } = await getAllPermissionsUseCase.execute();
 
-    reply.status(200).send({
-      data: permissions,
-    });
+    reply.status(200).send(permissions);
   } catch (e) {
     console.error('Error caught:', e);
     const error = e as Error;

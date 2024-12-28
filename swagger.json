@@ -44,6 +44,15 @@
     }
   },
   "paths": {
+    "/sessions": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
     "/users": {
       "post": {
         "description": "Create a new user",

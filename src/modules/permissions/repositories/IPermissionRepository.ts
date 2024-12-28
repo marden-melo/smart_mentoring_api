@@ -7,6 +7,7 @@ export interface IPermissionRepository {
   delete(id: string): Promise<void>;
   findById(id: string): Promise<Permission | null>;
   findAll(): Promise<Permission[]>;
+  findByName(name: string): Promise<Permission | null>;
   findAllWithPagination(limit: number, offset: number): Promise<Permission[]>;
   countUsers(): Promise<number>;
 }

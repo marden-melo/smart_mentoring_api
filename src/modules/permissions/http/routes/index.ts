@@ -20,7 +20,7 @@ export async function permissionRoutes(app: FastifyInstance) {
     required: ['id', 'name', 'description'],
   });
 
-  // app.addHook('onRequest', verifyJwt);
+  app.addHook('onRequest', verifyJwt);
 
   app.post(
     '/permissions',

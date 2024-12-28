@@ -9,18 +9,11 @@ export class GetAllPermissionsUseCase {
     private permissionRepository: PermissionRepository,
   ) {}
 
-  async execute(page: number = 1, limit: number = 10) {
-    const offset = (page - 1) * limit;
-
-    const permissions: Permission[] =
-      await this.permissionRepository.findAllWithPagination(limit, offset);
-    const total = await this.permissionRepository.countUsers();
+  async execute() {
+    const permissions: Permission[] = await this.permissionRepository.findAll();
 
     return {
       data: permissions,
-      total,
-      currentPage: page,
-      totalPages: Math.ceil(total / limit),
     };
   }
 }

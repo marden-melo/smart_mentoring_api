@@ -19,7 +19,7 @@ export async function rolesRoutes(app: FastifyInstance) {
     required: ['id', 'name'],
   });
 
-  // app.addHook('onRequest', verifyJwt);
+  app.addHook('onRequest', verifyJwt);
 
   app.post(
     '/roles',

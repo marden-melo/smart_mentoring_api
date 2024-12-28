@@ -10,8 +10,14 @@ import { rolesRoutes } from './modules/role/http/routes';
 import { permissionRoutes } from './modules/permissions/http/routes';
 import { rolePermissionsRoutes } from './modules/rolePermissions/http/routes';
 import { usersRoutes } from './modules/user/http/routes';
+import fastifyJwt from 'fastify-jwt';
+import { authRoute } from './modules/authentication/http/routes';
 
 export const app = fastify();
+
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
+});
 
 app.register(swagger, {
   swagger: {
@@ -48,6 +54,7 @@ app.ready((err) => {
   console.log(`Swagger documentation generated at ${swaggerFilePath}`);
 });
 
+app.register(authRoute);
 app.register(usersRoutes);
 app.register(plansRoutes);
 app.register(rolesRoutes);

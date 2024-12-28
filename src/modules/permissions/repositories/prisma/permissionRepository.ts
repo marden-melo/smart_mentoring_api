@@ -1,10 +1,15 @@
 import { Permission, PrismaClient } from '@prisma/client';
 import { IPermissionRepository } from '../IPermissionRepository';
 import { PermissionDTO, UpdatePermissionDTO } from '../../dtos/permissionDTO';
-
-const prisma = new PrismaClient();
+import { prisma } from '@/lib/prisma';
 
 export class PermissionRepository implements IPermissionRepository {
+  async findByName(name: string): Promise<Permission | null> {
+    return prisma.permission.findUnique({
+      where: { name },
+    });
+  }
+
   async create(data: PermissionDTO) {
     return prisma.permission.create({
       data: {
