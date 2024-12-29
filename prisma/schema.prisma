@@ -19,6 +19,14 @@ enum PaymentStatus {
   FAILED
 }
 
+enum PaymentType {
+  PIX
+  CREDIT_CARD
+  DEBIT_CARD
+  BOLETO
+  CASH
+}
+
 enum RoleType {
   ADMIN
   MANAGER
@@ -33,22 +41,25 @@ enum ClientType {
 }
 
 model User {
-  id            String    @id @default(uuid())
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
+  id            String         @id @default(uuid())
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
   name          String
-  email         String    @unique
+  email         String         @unique
   password      String
   roleId        String
   planId        String?
   testStartDate DateTime?
-  isActive      Boolean   @default(true)
-  role          Role      @relation(fields: [roleId], references: [id])
-  plan          Plan?     @relation(fields: [planId], references: [id])
+  isActive      Boolean        @default(true)
+  role          Role           @relation(fields: [roleId], references: [id])
+  plan          Plan?          @relation(fields: [planId], references: [id])
+  notifications Notification[]
 
-  budgets   Budget[]
-  payments  Payment[]
-  auditLogs AuditLog[]
+  budgets       Budget[]
+  payments      Payment[]
+  auditLogs     AuditLog[]
+  BudgetHistory BudgetHistory[]
+  Subscription  Subscription[]
 
   @@map("users")
 }
@@ -97,7 +108,8 @@ model Plan {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users User[]
+  users         User[]
+  subscriptions Subscription[]
 
   @@map("plans")
 }
@@ -120,21 +132,41 @@ model Client {
   state       String?
   cep         String?
   responsable String?
+  budgets     Budget[]
 
   @@map("clients")
 }
 
 model Budget {
-  id          String       @id @default(uuid())
-  createdAt   DateTime     @default(now()) @map("created_at")
-  updatedAt   DateTime     @updatedAt @map("updated_at")
-  title       String
-  description String?
-  status      BudgetStatus @default(PENDING)
-  userId      String
-  user        User         @relation(fields: [userId], references: [id])
-  items       BudgetItem[]
-  payments    Payment[]
+  id              String       @id @default(uuid())
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+  title           String
+  description     String?
+  status          BudgetStatus @default(PENDING)
+  discountPercent Float?       @map("discount_percent")
+  discountValue   Float?       @map("discount_value")
+  subTotal        Float?       @map("sub_total")
+  total           Float?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  bonusId String?
+  bonus   Bonus?  @relation(fields: [bonusId], references: [id])
+
+  items BudgetItem[]
+
+  paymentType     PaymentType
+  installments    Int?
+  additionalNotes String?     @map("additional_notes")
+
+  paymentPlan   PaymentPlan[]
+  BudgetHistory BudgetHistory[]
+  CustomField   CustomField[]
+  Document      Document[]
+  clientId      String
+  client        Client          @relation(fields: [clientId], references: [id])
 
   @@map("budgets")
 }
@@ -150,6 +182,30 @@ model BudgetItem {
   budget     Budget  @relation(fields: [budgetId], references: [id])
 
   @@map("budget_items")
+}
+
+model Bonus {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  description String   @map("description")
+  percentage  Float?   @map("percentage")
+  value       Float?   @map("value")
+  budgets     Budget[]
+
+  @@map("bonuses")
+}
+
+model PaymentPlan {
+  id           String @id @default(uuid())
+  description  String
+  value        Float
+  monthlyFee   Float?
+  contractTerm Int?
+  budgetId     String
+  budget       Budget @relation(fields: [budgetId], references: [id])
+
+  @@map("payment_plans")
 }
 
 model Product {
@@ -173,6 +229,55 @@ model Category {
   @@map("categories")
 }
 
+model BudgetHistory {
+  id          String   @id @default(uuid())
+  budgetId    String
+  budget      Budget   @relation(fields: [budgetId], references: [id])
+  changeType  String
+  description String?
+  changedById String
+  changedBy   User     @relation(fields: [changedById], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model CustomField {
+  id       String @id @default(uuid())
+  budgetId String
+  budget   Budget @relation(fields: [budgetId], references: [id])
+  name     String
+  value    String
+}
+
+model Document {
+  id         String   @id @default(uuid())
+  budgetId   String
+  budget     Budget   @relation(fields: [budgetId], references: [id])
+  filePath   String
+  fileName   String
+  fileType   String
+  uploadedAt DateTime @default(now())
+}
+
+model Subscription {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  planId    String
+  plan      Plan      @relation(fields: [planId], references: [id])
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+  isActive  Boolean   @default(true)
+}
+
 model Payment {
   id               String        @id @default(uuid())
   createdAt        DateTime      @default(now()) @map("created_at")
@@ -181,8 +286,6 @@ model Payment {
   status           PaymentStatus @default(PENDING)
   userId           String
   user             User          @relation(fields: [userId], references: [id])
-  budgetId         String
-  budget           Budget        @relation(fields: [budgetId], references: [id])
   gatewayReference String?       @map("gateway_reference")
   gatewayStatus    String?       @map("gateway_status")
 

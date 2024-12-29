@@ -12,6 +12,8 @@ import { IUsersRepository } from '@/modules/user/repositories/IUserRepository';
 import { UsersRepository } from '@/modules/user/repositories/prisma/usersRepository';
 import { ICategoryRepository } from '@/modules/categories/repositories/ICategoryRepository';
 import { CategoryRepository } from '@/modules/categories/repositories/prisma/categoryRepository';
+import { IClientRepository } from '@/modules/client/repositories/IClientRepository';
+import { ClientRepository } from '@/modules/client/repositories/prisma/clientRepository';
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -35,4 +37,9 @@ container.registerSingleton<IRolePermissionRepository>(
 container.registerSingleton<ICategoryRepository>(
   'CategoryRepository',
   CategoryRepository,
+);
+
+container.registerSingleton<IClientRepository>(
+  'ClientRepository',
+  ClientRepository,
 );

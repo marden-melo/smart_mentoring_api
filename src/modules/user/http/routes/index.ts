@@ -10,7 +10,7 @@ import { verifyJwt } from '@/utils/middlewares/verify-jwt';
 import { verifyUserRole } from '@/utils/middlewares/verify-user-role';
 
 export async function usersRoutes(app: FastifyInstance) {
-  // app.addHook('onRequest', verifyJwt);
+  app.addHook('onRequest', verifyJwt);
 
   app.post(
     '/users',
@@ -125,7 +125,7 @@ export async function usersRoutes(app: FastifyInstance) {
           },
         },
       },
-      // onRequest: [verifyUserRole('ADMIN')],
+      onRequest: [verifyUserRole('ADMIN')],
     },
     getAllUsersController,
   );

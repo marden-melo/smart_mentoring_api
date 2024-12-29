@@ -1659,6 +1659,492 @@
           }
         }
       }
+    },
+    "/client": {
+      "post": {
+        "description": "Create a new client",
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "clientType": {
+                  "type": "string",
+                  "enum": [
+                    "COMPANY",
+                    "INDIVIDUAL"
+                  ]
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "cep": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "cnpj": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "companyName": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "cpf": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "fullName": {
+                  "type": "string"
+                },
+                "district": {
+                  "type": "string"
+                },
+                "number": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "street": {
+                  "type": "string"
+                },
+                "responsable": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "clientType",
+                "email",
+                "phone",
+                "fullName"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Client successfully registered",
+            "schema": {
+              "description": "Client successfully registered",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    },
+                    "clientType": {
+                      "type": "string"
+                    },
+                    "cep": {
+                      "type": "string"
+                    },
+                    "city": {
+                      "type": "string"
+                    },
+                    "cnpj": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "companyName": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "cpf": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "district": {
+                      "type": "string"
+                    },
+                    "number": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "street": {
+                      "type": "string"
+                    },
+                    "responsable": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients": {
+      "get": {
+        "description": "Get all clients",
+        "tags": [
+          "Clients"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of clients",
+            "schema": {
+              "description": "List of clients",
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "phone": {
+                        "type": "string"
+                      },
+                      "fullName": {
+                        "type": "string"
+                      },
+                      "clientType": {
+                        "type": "string"
+                      },
+                      "cep": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "cnpj": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "companyName": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "cpf": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "district": {
+                        "type": "string"
+                      },
+                      "number": {
+                        "type": "string"
+                      },
+                      "state": {
+                        "type": "string"
+                      },
+                      "street": {
+                        "type": "string"
+                      },
+                      "responsable": {
+                        "type": "string",
+                        "nullable": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/client/{id}": {
+      "get": {
+        "description": "Get client by ID",
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Client data by ID",
+            "schema": {
+              "description": "Client data by ID",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    },
+                    "clientType": {
+                      "type": "string"
+                    },
+                    "cep": {
+                      "type": "string"
+                    },
+                    "city": {
+                      "type": "string"
+                    },
+                    "cnpj": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "companyName": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "cpf": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "district": {
+                      "type": "string"
+                    },
+                    "number": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "street": {
+                      "type": "string"
+                    },
+                    "responsable": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update a client by ID",
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "phone": {
+                  "type": "string"
+                },
+                "fullName": {
+                  "type": "string"
+                },
+                "clientType": {
+                  "type": "string",
+                  "enum": [
+                    "COMPANY",
+                    "INDIVIDUAL"
+                  ]
+                },
+                "cep": {
+                  "type": "string"
+                },
+                "city": {
+                  "type": "string"
+                },
+                "cnpj": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "companyName": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "cpf": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "district": {
+                  "type": "string"
+                },
+                "number": {
+                  "type": "string"
+                },
+                "state": {
+                  "type": "string"
+                },
+                "street": {
+                  "type": "string"
+                },
+                "responsable": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            }
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Client successfully updated",
+            "schema": {
+              "description": "Client successfully updated",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "fullName": {
+                      "type": "string"
+                    },
+                    "clientType": {
+                      "type": "string"
+                    },
+                    "cep": {
+                      "type": "string"
+                    },
+                    "city": {
+                      "type": "string"
+                    },
+                    "cnpj": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "companyName": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "cpf": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "district": {
+                      "type": "string"
+                    },
+                    "number": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "street": {
+                      "type": "string"
+                    },
+                    "responsable": {
+                      "type": "string",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a client by ID",
+        "tags": [
+          "Clients"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Client deleted successfully",
+            "schema": {
+              "description": "Client deleted successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Client not found",
+            "schema": {
+              "description": "Client not found",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "host": "localhost:3333",
@@ -1695,6 +2181,10 @@
     {
       "name": "Category",
       "description": "Category related endpoints"
+    },
+    {
+      "name": "Clients",
+      "description": "Client related endpoints"
     }
   ]
 }
