@@ -60,6 +60,30 @@
         "name"
       ],
       "title": "Category"
+    },
+    "def-3": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "percentage": {
+          "type": "number"
+        },
+        "value": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "percentage",
+        "value"
+      ],
+      "title": "Bonus"
     }
   },
   "paths": {
@@ -2145,6 +2169,227 @@
           }
         }
       }
+    },
+    "/bonus": {
+      "post": {
+        "description": "Create a new bonus",
+        "tags": [
+          "Bonus"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "percentage": {
+                  "type": "number"
+                },
+                "value": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "description",
+                "percentage",
+                "value"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Bonus created successfully",
+            "schema": {
+              "description": "Bonus created successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/def-3"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bonuses": {
+      "get": {
+        "description": "Retrieve all bonuses",
+        "tags": [
+          "Bonus"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of bonuses",
+            "schema": {
+              "description": "List of bonuses",
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/def-3"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bonus/{id}": {
+      "get": {
+        "description": "Retrieve a bonus by ID",
+        "tags": [
+          "Bonus"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bonus details",
+            "schema": {
+              "description": "Bonus details",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/def-3"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bonus not found",
+            "schema": {
+              "description": "Bonus not found",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update a bonus",
+        "tags": [
+          "Bonus"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "percentage": {
+                  "type": "number"
+                },
+                "value": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bonus updated successfully",
+            "schema": {
+              "description": "Bonus updated successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/def-3"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bonus not found",
+            "schema": {
+              "description": "Bonus not found",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a bonus by ID",
+        "tags": [
+          "Bonus"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bonus deleted successfully",
+            "schema": {
+              "description": "Bonus deleted successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Bonus not found",
+            "schema": {
+              "description": "Bonus not found",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "host": "localhost:3333",
@@ -2185,6 +2430,10 @@
     {
       "name": "Clients",
       "description": "Client related endpoints"
+    },
+    {
+      "name": "Bonus",
+      "description": "Bonus related endpoints"
     }
   ]
 }

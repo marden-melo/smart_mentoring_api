@@ -14,6 +14,8 @@ import { ICategoryRepository } from '@/modules/categories/repositories/ICategory
 import { CategoryRepository } from '@/modules/categories/repositories/prisma/categoryRepository';
 import { IClientRepository } from '@/modules/client/repositories/IClientRepository';
 import { ClientRepository } from '@/modules/client/repositories/prisma/clientRepository';
+import { IBonusRepository } from '@/modules/bonus/repositories/IBonusRepository';
+import { BonusRepository } from '@/modules/bonus/repositories/prisma/bonusRepository';
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -42,4 +44,9 @@ container.registerSingleton<ICategoryRepository>(
 container.registerSingleton<IClientRepository>(
   'ClientRepository',
   ClientRepository,
+);
+
+container.registerSingleton<IBonusRepository>(
+  'BonusRepository',
+  BonusRepository,
 );

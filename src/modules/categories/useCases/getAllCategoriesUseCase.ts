@@ -3,7 +3,7 @@ import { CategoryRepository } from '../repositories/prisma/categoryRepository';
 import { Category, Permission } from '@prisma/client';
 
 @injectable()
-export class GetAllCategoriessUseCase {
+export class GetAllCategoriesUseCase {
   constructor(
     @inject('CategoryRepository')
     private categoryRepository: CategoryRepository,

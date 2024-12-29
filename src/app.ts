@@ -14,6 +14,7 @@ import fastifyJwt from 'fastify-jwt';
 import { authRoute } from './modules/authentication/http/routes';
 import { categoryRoutes } from './modules/categories/http/routes';
 import { clientsRoutes } from './modules/client/http/routes';
+import { bonusRoutes } from './modules/bonus/http/routes';
 
 export const app = fastify();
 
@@ -43,6 +44,7 @@ app.register(swagger, {
       },
       { name: 'Category', description: 'Category related endpoints' },
       { name: 'Clients', description: 'Client related endpoints' },
+      { name: 'Bonus', description: 'Bonus related endpoints' },
     ],
   },
 });
@@ -66,6 +68,7 @@ app.register(permissionRoutes);
 app.register(rolePermissionsRoutes);
 app.register(categoryRoutes);
 app.register(clientsRoutes);
+app.register(bonusRoutes);
 
 app.setErrorHandler((error, request, reply) => {
   if (error instanceof ZodError) {

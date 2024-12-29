@@ -1,31 +1,34 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { container } from 'tsyringe';
-import { CreateCategoryUseCase } from '../../useCases/createCategoryUseCase';
-import { createCategorySchema } from '../../validators/createCategoryValidator';
-import { GetAllCategoriesUseCase } from '../../useCases/getAllCategoriesUseCase';
-import { GetCategoryByIdUseCase } from '../../useCases/getCategoryByIdUseCase';
-import { DeleteCategoryUseCase } from '../../useCases/deleteCategoryUseCase';
-import { UpdateCategoryUseCase } from '../../useCases/updateCategoryUseCase';
+import { createBonusSchema } from '../../validators/createBonusValidator';
+import { CreateBonusUseCase } from '../../useCases/createBonusUseCase';
+import { GetAllBonusesUseCase } from '../../useCases/getAllBonusUseCase';
+import { GetBonusByIdUseCase } from '../../useCases/getBonusByIdUseCase';
 import { ResourceNotFoundError } from '@/utils/errors/resourceNotFoundError';
-import { UpdateCategoryDTO } from '../../dtos/categoryDTO';
+import { DeleteBonusUseCase } from '../../useCases/deleteBonusUseCase';
+import { UpdateBonusDTO } from '../../dtos/bonusDTO';
+import { UpdateBonusUseCase } from '../../useCases/updateCategoryUseCase';
 
-export async function createCategoryController(
+export async function createBonusController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
-    const { name, description } = createCategorySchema.parse(request.body);
+    const { percentage, description, value } = createBonusSchema.parse(
+      request.body,
+    );
 
-    const createCategoryUseCase = container.resolve(CreateCategoryUseCase);
+    const createBonusUseCase = container.resolve(CreateBonusUseCase);
 
-    const { data: category } = await createCategoryUseCase.execute({
-      name,
+    const { data: bonus } = await createBonusUseCase.execute({
       description,
+      percentage,
+      value,
     });
 
     reply
       .status(201)
-      .send({ message: 'Category created successfully', data: category });
+      .send({ message: 'Bonus created successfully', data: bonus });
   } catch (e) {
     const error = e as Error;
     console.error('Error caught:', error);
@@ -35,17 +38,17 @@ export async function createCategoryController(
   }
 }
 
-export async function getAllCategoriesController(
+export async function getAllBonusesController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
-    const getAllCategoriesUseCase = container.resolve(GetAllCategoriesUseCase);
-    const { data: categories, total } = await getAllCategoriesUseCase.execute();
+    const getAllBonusesUseCase = container.resolve(GetAllBonusesUseCase);
+    const { data: bonuses, total } = await getAllBonusesUseCase.execute();
 
     reply.status(200).send({
       total,
-      data: categories,
+      data: bonuses,
     });
   } catch (e) {
     console.error('Error caught:', e);
@@ -56,16 +59,16 @@ export async function getAllCategoriesController(
   }
 }
 
-export async function getCategoryByIdController(
+export async function getBonusByIdController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
     const { id } = request.params as { id: string };
-    const getCategoryByIdUseCase = container.resolve(GetCategoryByIdUseCase);
-    const { data: category } = await getCategoryByIdUseCase.execute(id);
+    const getBonusByIdUseCase = container.resolve(GetBonusByIdUseCase);
+    const { data: bonus } = await getBonusByIdUseCase.execute(id);
 
-    reply.status(200).send({ data: category });
+    reply.status(200).send({ data: bonus });
   } catch (e) {
     console.error('Error caught:', e);
     if (e instanceof ResourceNotFoundError) {
@@ -78,17 +81,17 @@ export async function getCategoryByIdController(
   }
 }
 
-export async function deleteCategoryController(
+export async function deleteBonusController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
     const { id } = request.params as { id: string };
 
-    const deleteCategoryUseCase = container.resolve(DeleteCategoryUseCase);
-    await deleteCategoryUseCase.execute(id);
+    const deleteBonusUseCase = container.resolve(DeleteBonusUseCase);
+    await deleteBonusUseCase.execute(id);
 
-    reply.status(200).send({ message: 'Category deleted successfully' });
+    reply.status(200).send({ message: 'Bonus deleted successfully' });
   } catch (e) {
     console.error('Error caught:', e);
     if (e instanceof ResourceNotFoundError) {
@@ -101,20 +104,20 @@ export async function deleteCategoryController(
   }
 }
 
-export async function updateCategoryController(
+export async function updateBonusController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
     const { id } = request.params as { id: string };
-    const data = request.body as UpdateCategoryDTO;
+    const data = request.body as UpdateBonusDTO;
 
-    const updateCategoryUseCase = container.resolve(UpdateCategoryUseCase);
-    const updatedCategory = await updateCategoryUseCase.execute(id, data);
+    const updateBonusUseCase = container.resolve(UpdateBonusUseCase);
+    const updatedBonus = await updateBonusUseCase.execute(id, data);
 
     reply.status(200).send({
-      message: 'Category updated successfully',
-      data: updatedCategory,
+      message: 'Bonus updated successfully',
+      data: updatedBonus,
     });
   } catch (e) {
     console.error('Error caught:', e);
