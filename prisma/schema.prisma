@@ -146,6 +146,7 @@ model Budget {
   id              String       @id @default(uuid())
   createdAt       DateTime     @default(now()) @map("created_at")
   updatedAt       DateTime     @updatedAt @map("updated_at")
+  budgetNumber    String       @unique @map("budget_number")
   title           String
   description     String?
   status          BudgetStatus @default(PENDING)
