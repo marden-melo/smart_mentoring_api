@@ -20,6 +20,8 @@ import { IProductOrServiceRepository } from '@/modules/productsOrServices/reposi
 import { ProductOrServiceRepository } from '@/modules/productsOrServices/repositories/prisma/productOrServiceRepository';
 import { IPaymentPlanRepository } from '@/modules/paymentPlan/repositories/IPaymentPlanRepository';
 import { PaymentPlanRepository } from '@/modules/paymentPlan/repositories/prisma/paymentPlanRepository';
+import { ICustomFieldRepository } from '@/modules/customFields/repositories/ICustomFieldRepository';
+import { CustomFieldRepository } from '@/modules/customFields/repositories/prisma/customFieldRepository';
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -63,4 +65,9 @@ container.registerSingleton<IProductOrServiceRepository>(
 container.registerSingleton<IPaymentPlanRepository>(
   'PaymentPlanRepository',
   PaymentPlanRepository,
+);
+
+container.registerSingleton<ICustomFieldRepository>(
+  'CustomFieldRepository',
+  CustomFieldRepository,
 );

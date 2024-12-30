@@ -3088,6 +3088,333 @@
           }
         }
       }
+    },
+    "/custom-field": {
+      "post": {
+        "description": "Create a new custom field",
+        "tags": [
+          "CustomFields"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "required": [
+                "name",
+                "budgetId",
+                "value"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Name of the custom field"
+                },
+                "budgetId": {
+                  "type": "string",
+                  "description": "ID of the budget"
+                },
+                "value": {
+                  "type": "string",
+                  "description": "Value of the custom field"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Custom field created successfully",
+            "schema": {
+              "description": "Custom field created successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "budgetId": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/custom-fields/budget/{budgetId}": {
+      "get": {
+        "description": "Retrieve all custom fields by budget ID",
+        "tags": [
+          "CustomFields"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Budget ID",
+            "required": true,
+            "in": "path",
+            "name": "budgetId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of custom fields",
+            "schema": {
+              "description": "List of custom fields",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "budgetId": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No custom fields found for this budget ID",
+            "schema": {
+              "description": "No custom fields found for this budget ID",
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/custom-field/{id}": {
+      "get": {
+        "description": "Retrieve a custom field by ID",
+        "tags": [
+          "CustomFields"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Custom field ID",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Custom field data",
+            "schema": {
+              "description": "Custom field data",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "budgetId": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Custom field not found",
+            "schema": {
+              "description": "Custom field not found",
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update a custom field by ID",
+        "tags": [
+          "CustomFields"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "type": "string",
+            "description": "Custom field ID",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Custom field updated successfully",
+            "schema": {
+              "description": "Custom field updated successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Custom field not found",
+            "schema": {
+              "description": "Custom field not found",
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a custom field by ID",
+        "tags": [
+          "CustomFields"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Custom field ID",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Custom field deleted successfully",
+            "schema": {
+              "description": "Custom field deleted successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Custom field not found",
+            "schema": {
+              "description": "Custom field not found",
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "host": "localhost:3333",
@@ -3139,7 +3466,11 @@
     },
     {
       "name": "PaymentPlan",
-      "description": "PaymentPlan related endpoints"
+      "description": "Payment Plan related endpoints"
+    },
+    {
+      "name": "CustomFields",
+      "description": "Custom Fields related endpoints"
     }
   ]
 }
