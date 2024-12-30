@@ -45,6 +45,21 @@ enum ProductType {
   SERVICE
 }
 
+enum SubscriptionStatus {
+  ACTIVE
+  PENDING
+  EXPIRED
+  CANCELLED
+  PAUSED
+  AWAITING_RENEWAL
+}
+
+enum PaymentInterval {
+  MONTHLY
+  ANNUALLY
+  WEEKLY
+}
+
 model User {
   id            String         @id @default(uuid())
   createdAt     DateTime       @default(now()) @map("created_at")
@@ -276,14 +291,37 @@ model Document {
 }
 
 model Subscription {
-  id        String    @id @default(uuid())
-  userId    String
-  user      User      @relation(fields: [userId], references: [id])
-  planId    String
-  plan      Plan      @relation(fields: [planId], references: [id])
-  startDate DateTime  @default(now())
-  endDate   DateTime?
-  isActive  Boolean   @default(true)
+  id                String             @id @default(uuid())
+  userId            String
+  user              User               @relation(fields: [userId], references: [id])
+  planId            String
+  plan              Plan               @relation(fields: [planId], references: [id])
+  startDate         DateTime           @default(now())
+  endDate           DateTime?
+  isActive          Boolean            @default(true)
+  autoRenew         Boolean            @default(false)
+  status            SubscriptionStatus @default(ACTIVE)
+  renewalDate       DateTime?
+  cancellationDate  DateTime?
+  trialEndDate      DateTime?
+  lastPaymentDate   DateTime?
+  nextPaymentDate   DateTime?
+  paymentInterval   PaymentInterval    @default(MONTHLY)
+  paymentGateway    String?
+  externalReference String?
+
+  SubscriptionHistory SubscriptionHistory[]
+
+  @@map("subscriptions")
+}
+
+model SubscriptionHistory {
+  id             String       @id @default(uuid())
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
+  oldPlanId      String
+  newPlanId      String
+  changedAt      DateTime     @default(now())
 }
 
 model Payment {

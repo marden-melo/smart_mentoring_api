@@ -22,6 +22,8 @@ import { IPaymentPlanRepository } from '@/modules/paymentPlan/repositories/IPaym
 import { PaymentPlanRepository } from '@/modules/paymentPlan/repositories/prisma/paymentPlanRepository';
 import { ICustomFieldRepository } from '@/modules/customFields/repositories/ICustomFieldRepository';
 import { CustomFieldRepository } from '@/modules/customFields/repositories/prisma/customFieldRepository';
+import { ISubscriptionRepository } from '@/modules/subscription/repositories/ISubscriptionRepository';
+import { SubscriptionRepository } from '@/modules/subscription/repositories/prisma/subscriptionRepository';
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -70,4 +72,9 @@ container.registerSingleton<IPaymentPlanRepository>(
 container.registerSingleton<ICustomFieldRepository>(
   'CustomFieldRepository',
   CustomFieldRepository,
+);
+
+container.registerSingleton<ISubscriptionRepository>(
+  'SubscriptionRepository',
+  SubscriptionRepository,
 );

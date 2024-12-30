@@ -3415,6 +3415,390 @@
           }
         }
       }
+    },
+    "/subscription": {
+      "post": {
+        "description": "Create a new subscription for a user",
+        "tags": [
+          "Subscription"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "planId": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "userId",
+                "planId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Subscription created successfully",
+            "schema": {
+              "description": "Subscription created successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "planId": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "startDate": {
+                      "type": "string"
+                    },
+                    "endDate": {
+                      "type": "string"
+                    },
+                    "isActive": {
+                      "type": "boolean"
+                    },
+                    "autoRenew": {
+                      "type": "boolean"
+                    },
+                    "renewalDate": {
+                      "type": "string"
+                    },
+                    "cancellationDate": {
+                      "type": "string"
+                    },
+                    "trialEndDate": {
+                      "type": "string"
+                    },
+                    "lastPaymentDate": {
+                      "type": "string"
+                    },
+                    "nextPaymentDate": {
+                      "type": "string"
+                    },
+                    "paymentInterval": {
+                      "type": "string"
+                    },
+                    "paymentGateway": {
+                      "type": "string"
+                    },
+                    "externalReference": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subscription/{id}": {
+      "get": {
+        "description": "Retrieve subscription by ID",
+        "tags": [
+          "Subscription"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription details",
+            "schema": {
+              "description": "Subscription details",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "planId": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "startDate": {
+                      "type": "string"
+                    },
+                    "endDate": {
+                      "type": "string"
+                    },
+                    "isActive": {
+                      "type": "boolean"
+                    },
+                    "autoRenew": {
+                      "type": "boolean"
+                    },
+                    "renewalDate": {
+                      "type": "string"
+                    },
+                    "cancellationDate": {
+                      "type": "string"
+                    },
+                    "trialEndDate": {
+                      "type": "string"
+                    },
+                    "lastPaymentDate": {
+                      "type": "string"
+                    },
+                    "nextPaymentDate": {
+                      "type": "string"
+                    },
+                    "paymentInterval": {
+                      "type": "string"
+                    },
+                    "paymentGateway": {
+                      "type": "string"
+                    },
+                    "externalReference": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update subscription details",
+        "tags": [
+          "Subscription"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "planId": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "startDate": {
+                  "type": "string"
+                },
+                "endDate": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription updated successfully",
+            "schema": {
+              "description": "Subscription updated successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "planId": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "startDate": {
+                      "type": "string"
+                    },
+                    "endDate": {
+                      "type": "string"
+                    },
+                    "isActive": {
+                      "type": "boolean"
+                    },
+                    "autoRenew": {
+                      "type": "boolean"
+                    },
+                    "renewalDate": {
+                      "type": "string"
+                    },
+                    "cancellationDate": {
+                      "type": "string"
+                    },
+                    "trialEndDate": {
+                      "type": "string"
+                    },
+                    "lastPaymentDate": {
+                      "type": "string"
+                    },
+                    "nextPaymentDate": {
+                      "type": "string"
+                    },
+                    "paymentInterval": {
+                      "type": "string"
+                    },
+                    "paymentGateway": {
+                      "type": "string"
+                    },
+                    "externalReference": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a subscription by ID",
+        "tags": [
+          "Subscription"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription deleted successfully",
+            "schema": {
+              "description": "Subscription deleted successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subscriptions/active": {
+      "get": {
+        "description": "Retrieve all active subscriptions",
+        "tags": [
+          "Subscription"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of active subscriptions",
+            "schema": {
+              "description": "List of active subscriptions",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "userId": {
+                        "type": "string"
+                      },
+                      "planId": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "startDate": {
+                        "type": "string"
+                      },
+                      "endDate": {
+                        "type": "string"
+                      },
+                      "isActive": {
+                        "type": "boolean"
+                      },
+                      "autoRenew": {
+                        "type": "boolean"
+                      },
+                      "renewalDate": {
+                        "type": "string"
+                      },
+                      "cancellationDate": {
+                        "type": "string"
+                      },
+                      "trialEndDate": {
+                        "type": "string"
+                      },
+                      "lastPaymentDate": {
+                        "type": "string"
+                      },
+                      "nextPaymentDate": {
+                        "type": "string"
+                      },
+                      "paymentInterval": {
+                        "type": "string"
+                      },
+                      "paymentGateway": {
+                        "type": "string"
+                      },
+                      "externalReference": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "host": "localhost:3333",
@@ -3471,6 +3855,10 @@
     {
       "name": "CustomFields",
       "description": "Custom Fields related endpoints"
+    },
+    {
+      "name": "Subscriptions",
+      "description": "subscription related endpoints"
     }
   ]
 }
