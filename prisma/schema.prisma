@@ -40,6 +40,11 @@ enum ClientType {
   INDIVIDUAL
 }
 
+enum ProductType {
+  PRODUCT
+  SERVICE
+}
+
 model User {
   id            String         @id @default(uuid())
   createdAt     DateTime       @default(now()) @map("created_at")
@@ -216,6 +221,8 @@ model Product {
   categoryId  String
   category    Category     @relation(fields: [categoryId], references: [id])
   budgetItems BudgetItem[]
+  type        ProductType  @default(PRODUCT)
+  quantity    Int
 
   @@map("products")
 }

@@ -2390,6 +2390,496 @@
           }
         }
       }
+    },
+    "/product-or-service": {
+      "post": {
+        "description": "Create a new product or service",
+        "tags": [
+          "ProductOrService"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "categoryId": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "quantity": {
+                  "type": "number"
+                },
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "PRODUCT",
+                    "SERVICE"
+                  ]
+                },
+                "description": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "categoryId",
+                "name",
+                "price",
+                "quantity",
+                "type"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Product or Service created successfully",
+            "schema": {
+              "description": "Product or Service created successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "categoryId": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "price": {
+                      "type": "number"
+                    },
+                    "quantity": {
+                      "type": "number"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products-or-services": {
+      "get": {
+        "description": "Retrieve all products or services",
+        "tags": [
+          "ProductOrService"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of products or services",
+            "schema": {
+              "description": "List of products or services",
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number"
+                },
+                "currentPage": {
+                  "type": "number"
+                },
+                "totalPages": {
+                  "type": "number"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "categoryId": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "price": {
+                        "type": "number"
+                      },
+                      "quantity": {
+                        "type": "number"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products": {
+      "get": {
+        "description": "Retrieve all products",
+        "tags": [
+          "ProductOrService"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of products",
+            "schema": {
+              "description": "List of products",
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number"
+                },
+                "currentPage": {
+                  "type": "number"
+                },
+                "totalPages": {
+                  "type": "number"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "categoryId": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "price": {
+                        "type": "number"
+                      },
+                      "quantity": {
+                        "type": "number"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/services": {
+      "get": {
+        "description": "Retrieve all services",
+        "tags": [
+          "ProductOrService"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of services",
+            "schema": {
+              "description": "List of services",
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number"
+                },
+                "currentPage": {
+                  "type": "number"
+                },
+                "totalPages": {
+                  "type": "number"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "categoryId": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "price": {
+                        "type": "number"
+                      },
+                      "quantity": {
+                        "type": "number"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product-or-service/{id}": {
+      "get": {
+        "description": "Retrieve product or service by ID",
+        "tags": [
+          "ProductOrService"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product or Service details",
+            "schema": {
+              "description": "Product or Service details",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "categoryId": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "price": {
+                      "type": "number"
+                    },
+                    "quantity": {
+                      "type": "number"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update a product or service",
+        "tags": [
+          "ProductOrService"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "price": {
+                  "type": "number"
+                },
+                "quantity": {
+                  "type": "number"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product or Service updated successfully",
+            "schema": {
+              "description": "Product or Service updated successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "categoryId": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "price": {
+                      "type": "number"
+                    },
+                    "quantity": {
+                      "type": "number"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a product or service",
+        "tags": [
+          "ProductOrService"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product or Service deleted successfully",
+            "schema": {
+              "description": "Product or Service deleted successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/product-or-service/count": {
+      "get": {
+        "description": "Count total products or services",
+        "tags": [
+          "ProductOrService"
+        ],
+        "responses": {
+          "200": {
+            "description": "Total count of products or services",
+            "schema": {
+              "description": "Total count of products or services",
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/products-or-services-by-name": {
+      "get": {
+        "description": "Retrieve products or services by name",
+        "tags": [
+          "ProductOrService"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "query",
+            "name": "name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of products or services by name",
+            "schema": {
+              "description": "List of products or services by name",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "categoryId": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number"
+                  },
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "categoryId",
+                  "name",
+                  "price",
+                  "quantity",
+                  "description"
+                ]
+              }
+            }
+          }
+        }
+      }
     }
   },
   "host": "localhost:3333",
@@ -2434,6 +2924,10 @@
     {
       "name": "Bonus",
       "description": "Bonus related endpoints"
+    },
+    {
+      "name": "ProductOrService",
+      "description": "Product or Service related endpoints"
     }
   ]
 }

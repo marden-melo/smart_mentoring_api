@@ -1,7 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 import { BonusRepository } from '../repositories/prisma/bonusRepository';
 import { CreateBonusDTO } from '../dtos/bonusDTO';
-import { BadRequestError } from '@/utils/errors/badRequestError';
 
 @injectable()
 export class CreateBonusUseCase {

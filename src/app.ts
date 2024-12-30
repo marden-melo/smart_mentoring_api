@@ -15,6 +15,7 @@ import { authRoute } from './modules/authentication/http/routes';
 import { categoryRoutes } from './modules/categories/http/routes';
 import { clientsRoutes } from './modules/client/http/routes';
 import { bonusRoutes } from './modules/bonus/http/routes';
+import { productOrServiceRoutes } from './modules/productsOrServices/http/routes';
 
 export const app = fastify();
 
@@ -45,6 +46,10 @@ app.register(swagger, {
       { name: 'Category', description: 'Category related endpoints' },
       { name: 'Clients', description: 'Client related endpoints' },
       { name: 'Bonus', description: 'Bonus related endpoints' },
+      {
+        name: 'ProductOrService',
+        description: 'Product or Service related endpoints',
+      },
     ],
   },
 });
@@ -69,6 +74,7 @@ app.register(rolePermissionsRoutes);
 app.register(categoryRoutes);
 app.register(clientsRoutes);
 app.register(bonusRoutes);
+app.register(productOrServiceRoutes);
 
 app.setErrorHandler((error, request, reply) => {
   if (error instanceof ZodError) {
