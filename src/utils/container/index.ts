@@ -18,6 +18,8 @@ import { IBonusRepository } from '@/modules/bonus/repositories/IBonusRepository'
 import { BonusRepository } from '@/modules/bonus/repositories/prisma/bonusRepository';
 import { IProductOrServiceRepository } from '@/modules/productsOrServices/repositories/IProductOrServiceRepository';
 import { ProductOrServiceRepository } from '@/modules/productsOrServices/repositories/prisma/productOrServiceRepository';
+import { IPaymentPlanRepository } from '@/modules/paymentPlan/repositories/IPaymentPlanRepository';
+import { PaymentPlanRepository } from '@/modules/paymentPlan/repositories/prisma/paymentPlanRepository';
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -56,4 +58,9 @@ container.registerSingleton<IBonusRepository>(
 container.registerSingleton<IProductOrServiceRepository>(
   'ProductOrServiceRepository',
   ProductOrServiceRepository,
+);
+
+container.registerSingleton<IPaymentPlanRepository>(
+  'PaymentPlanRepository',
+  PaymentPlanRepository,
 );

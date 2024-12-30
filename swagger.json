@@ -2880,6 +2880,214 @@
           }
         }
       }
+    },
+    "/payment-plan": {
+      "post": {
+        "description": "Create a new payment plan",
+        "tags": [
+          "PaymentPlan"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "budgetId": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "number"
+                },
+                "contractTerm": {
+                  "type": "number"
+                },
+                "monthlyFee": {
+                  "type": "number"
+                }
+              },
+              "required": [
+                "budgetId",
+                "description",
+                "value",
+                "contractTerm",
+                "monthlyFee"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Payment plan created successfully",
+            "schema": {
+              "description": "Payment plan created successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "budgetId": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "contractTerm": {
+                      "type": "number"
+                    },
+                    "monthlyFee": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payment-plan/{budgetId}": {
+      "get": {
+        "description": "Retrieve payment plans by budget ID",
+        "tags": [
+          "PaymentPlan"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "budgetId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of payment plans",
+            "schema": {
+              "description": "List of payment plans",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "budgetId": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "number"
+                      },
+                      "contractTerm": {
+                        "type": "number"
+                      },
+                      "monthlyFee": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/payment-plan/{id}": {
+      "put": {
+        "description": "Update a payment plan",
+        "tags": [
+          "PaymentPlan"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "description": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "number"
+                },
+                "contractTerm": {
+                  "type": "number"
+                },
+                "monthlyFee": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Payment plan updated successfully",
+            "schema": {
+              "description": "Payment plan updated successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "budgetId": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "value": {
+                      "type": "number"
+                    },
+                    "contractTerm": {
+                      "type": "number"
+                    },
+                    "monthlyFee": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "host": "localhost:3333",
@@ -2928,6 +3136,10 @@
     {
       "name": "ProductOrService",
       "description": "Product or Service related endpoints"
+    },
+    {
+      "name": "PaymentPlan",
+      "description": "PaymentPlan related endpoints"
     }
   ]
 }

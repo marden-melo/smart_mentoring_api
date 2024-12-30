@@ -16,6 +16,7 @@ import { categoryRoutes } from './modules/categories/http/routes';
 import { clientsRoutes } from './modules/client/http/routes';
 import { bonusRoutes } from './modules/bonus/http/routes';
 import { productOrServiceRoutes } from './modules/productsOrServices/http/routes';
+import { paymentPlanRoutes } from './modules/paymentPlan/http/routes';
 
 export const app = fastify();
 
@@ -50,6 +51,7 @@ app.register(swagger, {
         name: 'ProductOrService',
         description: 'Product or Service related endpoints',
       },
+      { name: 'PaymentPlan', description: 'PaymentPlan related endpoints' },
     ],
   },
 });
@@ -75,6 +77,7 @@ app.register(categoryRoutes);
 app.register(clientsRoutes);
 app.register(bonusRoutes);
 app.register(productOrServiceRoutes);
+app.register(paymentPlanRoutes);
 
 app.setErrorHandler((error, request, reply) => {
   if (error instanceof ZodError) {
