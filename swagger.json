@@ -3799,6 +3799,266 @@
           }
         }
       }
+    },
+    "/subscription/history": {
+      "post": {
+        "description": "Create a new subscription history record",
+        "tags": [
+          "SubscriptionHistory"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "subscriptionId": {
+                  "type": "string"
+                },
+                "oldPlanId": {
+                  "type": "string"
+                },
+                "newPlanId": {
+                  "type": "string"
+                },
+                "changedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "subscriptionId",
+                "oldPlanId",
+                "newPlanId",
+                "changedAt"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Subscription history created successfully",
+            "schema": {
+              "description": "Subscription history created successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "subscriptionId": {
+                      "type": "string"
+                    },
+                    "oldPlanId": {
+                      "type": "string"
+                    },
+                    "newPlanId": {
+                      "type": "string"
+                    },
+                    "changedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subscription/history/{id}": {
+      "get": {
+        "description": "Retrieve subscription history by ID",
+        "tags": [
+          "SubscriptionHistory"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription history details",
+            "schema": {
+              "description": "Subscription history details",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "subscriptionId": {
+                      "type": "string"
+                    },
+                    "oldPlanId": {
+                      "type": "string"
+                    },
+                    "newPlanId": {
+                      "type": "string"
+                    },
+                    "changedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update subscription history details",
+        "tags": [
+          "SubscriptionHistory"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "oldPlanId": {
+                  "type": "string"
+                },
+                "newPlanId": {
+                  "type": "string"
+                },
+                "changedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              }
+            }
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription history updated successfully",
+            "schema": {
+              "description": "Subscription history updated successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "subscriptionId": {
+                      "type": "string"
+                    },
+                    "oldPlanId": {
+                      "type": "string"
+                    },
+                    "newPlanId": {
+                      "type": "string"
+                    },
+                    "changedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a subscription history record by ID",
+        "tags": [
+          "SubscriptionHistory"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription history deleted successfully",
+            "schema": {
+              "description": "Subscription history deleted successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subscriptions/history/active": {
+      "get": {
+        "description": "Retrieve all active subscription histories",
+        "tags": [
+          "SubscriptionHistory"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of active subscription histories",
+            "schema": {
+              "description": "List of active subscription histories",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "subscriptionId": {
+                        "type": "string"
+                      },
+                      "oldPlanId": {
+                        "type": "string"
+                      },
+                      "newPlanId": {
+                        "type": "string"
+                      },
+                      "changedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "host": "localhost:3333",
@@ -3858,7 +4118,11 @@
     },
     {
       "name": "Subscriptions",
-      "description": "subscription related endpoints"
+      "description": "Subscription related endpoints"
+    },
+    {
+      "name": "SubscriptionHistory",
+      "description": "Subscription History related endpoints"
     }
   ]
 }

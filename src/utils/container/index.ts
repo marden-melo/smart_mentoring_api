@@ -24,6 +24,8 @@ import { ICustomFieldRepository } from '@/modules/customFields/repositories/ICus
 import { CustomFieldRepository } from '@/modules/customFields/repositories/prisma/customFieldRepository';
 import { ISubscriptionRepository } from '@/modules/subscription/repositories/ISubscriptionRepository';
 import { SubscriptionRepository } from '@/modules/subscription/repositories/prisma/subscriptionRepository';
+import { ISubscriptionHistoryRepository } from '@/modules/SubscriptionHistory/repositories/ISubscriptionHistoryRepository';
+import { SubscriptionHistoryRepository } from '@/modules/SubscriptionHistory/repositories/prisma/subscriptionHistoryRepository';
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -77,4 +79,9 @@ container.registerSingleton<ICustomFieldRepository>(
 container.registerSingleton<ISubscriptionRepository>(
   'SubscriptionRepository',
   SubscriptionRepository,
+);
+
+container.registerSingleton<ISubscriptionHistoryRepository>(
+  'SubscriptionHistoryRepository',
+  SubscriptionHistoryRepository,
 );
