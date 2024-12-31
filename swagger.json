@@ -84,6 +84,35 @@
         "value"
       ],
       "title": "Bonus"
+    },
+    "def-4": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "isRead": {
+          "type": "boolean"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "message",
+        "isRead",
+        "createdAt"
+      ],
+      "title": "Notification"
     }
   },
   "paths": {
@@ -4059,6 +4088,445 @@
           }
         }
       }
+    },
+    "/notification": {
+      "post": {
+        "description": "Create a new notification",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "userId",
+                "message"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Notification created successfully",
+            "schema": {
+              "description": "Notification created successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/def-4"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications": {
+      "get": {
+        "description": "Retrieve all notifications",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "type": "number",
+            "required": false,
+            "in": "query",
+            "name": "page"
+          },
+          {
+            "type": "number",
+            "required": false,
+            "in": "query",
+            "name": "limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of notifications",
+            "schema": {
+              "description": "List of notifications",
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/def-4"
+                  }
+                },
+                "currentPage": {
+                  "type": "number"
+                },
+                "totalPages": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notification/{id}": {
+      "get": {
+        "description": "Retrieve a notification by ID",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification details",
+            "schema": {
+              "description": "Notification details",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/def-4"
+                  }
+                },
+                "total": {
+                  "type": "number"
+                },
+                "currentPage": {
+                  "type": "number"
+                },
+                "totalPages": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Notification not found",
+            "schema": {
+              "description": "Notification not found",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete a notification",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Notification deleted successfully",
+            "schema": {
+              "description": "Notification deleted successfully"
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update a notification",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "isRead": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "message",
+                "isRead"
+              ]
+            }
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification updated successfully",
+            "schema": {
+              "description": "Notification updated successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/def-4"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notification/{id}/read": {
+      "put": {
+        "description": "Mark a notification as read/unread",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "isRead": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "isRead"
+              ]
+            }
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification updated successfully",
+            "schema": {
+              "description": "Notification updated successfully",
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/user/{userId}": {
+      "delete": {
+        "description": "Delete all notifications by user ID",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notifications deleted successfully",
+            "schema": {
+              "description": "Notifications deleted successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/user/{userId}/mark-all-read": {
+      "put": {
+        "description": "Mark all notifications as read for a user",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All notifications marked as read",
+            "schema": {
+              "description": "All notifications marked as read",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/user/{userId}/unread-count": {
+      "get": {
+        "description": "Get unread notifications count for a user",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Unread notifications count",
+            "schema": {
+              "description": "Unread notifications count",
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/user/{userId}/recent": {
+      "get": {
+        "description": "Get recent notifications for a user",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "type": "number",
+            "required": false,
+            "in": "query",
+            "name": "limit"
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recent notifications",
+            "schema": {
+              "description": "Recent notifications",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/def-4"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/user/{userId}/paginated": {
+      "get": {
+        "description": "Get paginated notifications for a user",
+        "tags": [
+          "Notification"
+        ],
+        "parameters": [
+          {
+            "type": "number",
+            "required": false,
+            "in": "query",
+            "name": "page"
+          },
+          {
+            "type": "number",
+            "required": false,
+            "in": "query",
+            "name": "limit"
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "userId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated notifications",
+            "schema": {
+              "description": "Paginated notifications",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/def-4"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "host": "localhost:3333",
@@ -4123,6 +4591,10 @@
     {
       "name": "SubscriptionHistory",
       "description": "Subscription History related endpoints"
+    },
+    {
+      "name": "Notifications",
+      "description": "Notification related endpoints"
     }
   ]
 }

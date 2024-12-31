@@ -5,11 +5,12 @@ import {
   idSchema,
 } from '../../validators/createSubscriptionHistoryValidator';
 import { CreateSubscriptionHistoryUseCase } from '../../useCases/createSubscriptionHistoryUseCase';
-import { GetSubscriptionHistoryByIdUseCase } from '../../useCases/GetSubscriptionHistoryByIdUseCase';
+
 import { UpdateSubscriptionHistoryDTO } from '../../dtos/subscriptionHistoryDTO';
 import { UpdateSubscriptionHistoryUseCase } from '../../useCases/updateSubscriptionHistoryUseCase ';
 import { DeleteSubscriptionHistoryUseCase } from '../../useCases/deleteSubscriptionHistoryUseCase';
 import { GetActiveSubscriptionsUseCase } from '@/modules/subscription/useCases/getActiveSubscriptionUseCase';
+import { GetSubscriptionHistoryByIdUseCase } from '../../useCases/getSubscriptionHistoryByIdUseCase';
 
 export async function createSubscriptionHistoryController(
   request: FastifyRequest,
