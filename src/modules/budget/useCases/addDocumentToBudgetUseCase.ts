@@ -13,24 +13,19 @@ export class AddDocumentToBudgetUseCase {
   constructor(
     @inject('BudgetRepository')
     private budgetRepository: BudgetRepository,
-
-    @inject('DocumentRepository')
-    private documentRepository: DocumentRepository,
   ) {}
 
   async execute(budgetId: string, documentData: DocumentInput) {
-    // Verifica se o orçamento existe
-    const budget = await this.budgetRepository.findById(budgetId);
+    const budget = await this.budgetRepository.getBudgetById(budgetId);
 
     if (!budget) {
       throw new ResourceNotFoundError('Budget not found');
     }
 
-    // Cria o registro do documento
-    const document = await this.documentRepository.create({
-      ...documentData,
+    const document = await this.budgetRepository.addDocumentToBudget(
       budgetId,
-    });
+      documentData,
+    );
 
     return document;
   }

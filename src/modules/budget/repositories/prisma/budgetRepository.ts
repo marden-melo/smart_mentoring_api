@@ -11,6 +11,7 @@ import {
   BudgetItemDTO,
   CreateBudgetDTO,
   CreateDocumentInputDTO,
+  DocumentInputDTO,
   UpdateBudgetDTO,
 } from '../../dtos/budgetDTO';
 import { prisma } from '@/lib/prisma';
@@ -155,11 +156,13 @@ export class BudgetRepository implements IBudgetRepository {
 
   async addDocumentToBudget(
     budgetId: string,
-    document: Document,
+    documentData: DocumentInputDTO,
   ): Promise<Document> {
     const newDocument = await prisma.document.create({
       data: {
-        ...document,
+        fileName: documentData.fileName,
+        filePath: documentData.filePath,
+        fileType: documentData.fileType,
         budgetId,
       },
     });

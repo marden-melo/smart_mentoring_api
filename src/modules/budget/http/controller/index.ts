@@ -20,6 +20,7 @@ import {
   GetBudgetsUserQueryDTO,
 } from '../../dtos/budgetDTO';
 import { BudgetStatus } from '@prisma/client';
+import { AddDocumentToBudgetUseCase } from '../../useCases/addDocumentToBudgetUseCase';
 
 export async function createBudgetController(
   request: FastifyRequest,
@@ -371,5 +372,37 @@ export async function updateBudgetController(
     reply
       .status(500)
       .send({ error: 'Internal server error', details: error.message });
+  }
+}
+
+export async function addDocumentToBudgetController(
+  request: FastifyRequest,
+  reply: FastifyReply,
+) {
+  try {
+    const { budgetId } = request.params as { budgetId: string };
+    const { fileName, filePath, fileType } = request.body as {
+      fileName: string;
+      filePath: string;
+      fileType: string;
+    };
+
+    const addDocumentToBudgetUseCase = container.resolve(
+      AddDocumentToBudgetUseCase,
+    );
+
+    const document = await addDocumentToBudgetUseCase.execute(budgetId, {
+      fileName,
+      filePath,
+      fileType,
+    });
+
+    reply.status(201).send({
+      message: 'Document added successfully',
+      data: document,
+    });
+  } catch (error) {
+    console.error('Error adding document to budget:', error);
+    reply.status(500).send({ error: 'Internal server error' });
   }
 }
