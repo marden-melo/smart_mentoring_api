@@ -34,11 +34,22 @@ export async function registerUserController(
       .status(201)
       .send({ message: 'User registered successfully', data: user });
   } catch (e) {
-    console.error('Error caught:', e);
+    console.error('Error caught during user registration:', e);
+    const error = e as Error;
     if (e instanceof UserAlreadyExistsError) {
       return reply.status(409).send({ message: e.message });
     }
-    throw e;
+
+    if (error instanceof Error) {
+      console.error('Error details:', error.stack);
+    }
+
+    return reply
+      .status(500)
+      .send({
+        error: 'Internal server error',
+        details: error.message || 'Unknown error',
+      });
   }
 }
 

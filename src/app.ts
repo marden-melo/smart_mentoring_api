@@ -99,12 +99,17 @@ app.register(budgetRoutes);
 
 app.setErrorHandler((error, request, reply) => {
   if (error instanceof ZodError) {
-    return reply
-      .status(400)
-      .send({ message: 'Validation error.', issues: error.format() });
+    console.error('Validation error:', error.format());
+    return reply.status(400).send({
+      message: 'Validation error.',
+      issues: error.format(),
+    });
   }
+
+  console.error('Internal Server Error:', error.stack || error.message);
+
   if (env.NODE_ENV !== 'production') {
-    console.error(error);
+    console.error('Detailed Error:', error);
   }
 
   return reply.status(500).send({ message: 'Internal server error.' });
