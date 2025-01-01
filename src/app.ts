@@ -21,6 +21,7 @@ import { customFieldRoutes } from './modules/customFields/http/routes';
 import { subscriptionRoutes } from './modules/subscription/http/routes';
 import { subscriptionHistoryRoutes } from './modules/SubscriptionHistory/http/routes';
 import { notificationRoutes } from './modules/notifications/http/routes';
+import { budgetRoutes } from './modules/budget/http/routes';
 
 export const app = fastify();
 
@@ -63,6 +64,7 @@ app.register(swagger, {
         description: 'Subscription History related endpoints',
       },
       { name: 'Notifications', description: 'Notification related endpoints' },
+      { name: 'Budget', description: 'Budget related endpoints' },
     ],
   },
 });
@@ -93,6 +95,7 @@ app.register(customFieldRoutes);
 app.register(subscriptionRoutes);
 app.register(subscriptionHistoryRoutes);
 app.register(notificationRoutes);
+app.register(budgetRoutes);
 
 app.setErrorHandler((error, request, reply) => {
   if (error instanceof ZodError) {

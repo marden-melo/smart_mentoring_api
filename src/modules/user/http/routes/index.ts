@@ -125,7 +125,6 @@ export async function usersRoutes(app: FastifyInstance) {
           },
         },
       },
-      onRequest: [verifyUserRole('ADMIN')],
     },
     getAllUsersController,
   );

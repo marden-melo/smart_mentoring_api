@@ -200,8 +200,9 @@ model BudgetItem {
   unitPrice  Float
   totalPrice Float
   product    Product @relation(fields: [productId], references: [id])
-  budget     Budget  @relation(fields: [budgetId], references: [id])
+  budget     Budget  @relation(fields: [budgetId], references: [id], onDelete: Cascade)
 
+  @@unique([productId, budgetId])
   @@map("budget_items")
 }
 

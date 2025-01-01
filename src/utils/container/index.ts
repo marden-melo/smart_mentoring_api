@@ -28,6 +28,8 @@ import { ISubscriptionHistoryRepository } from '@/modules/SubscriptionHistory/re
 import { SubscriptionHistoryRepository } from '@/modules/SubscriptionHistory/repositories/prisma/subscriptionHistoryRepository';
 import { INotificationRepository } from '@/modules/notifications/repositories/INotificationRepository';
 import { NotificationRepository } from '@/modules/notifications/repositories/prisma/notificationRepository';
+import { IBudgetRepository } from '@/modules/budget/repositories/IBudgetRepository';
+import { BudgetRepository } from '@/modules/budget/repositories/prisma/budgetRepository';
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -91,4 +93,9 @@ container.registerSingleton<ISubscriptionHistoryRepository>(
 container.registerSingleton<INotificationRepository>(
   'NotificationRepository',
   NotificationRepository,
+);
+
+container.registerSingleton<IBudgetRepository>(
+  'BudgetRepository',
+  BudgetRepository,
 );

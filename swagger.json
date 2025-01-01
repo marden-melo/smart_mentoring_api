@@ -113,6 +113,31 @@
         "createdAt"
       ],
       "title": "Notification"
+    },
+    "def-5": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "clientId": {
+          "type": "string"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "total": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [],
+      "title": "Budget"
     }
   },
   "paths": {
@@ -4527,6 +4552,940 @@
           }
         }
       }
+    },
+    "/budget": {
+      "post": {
+        "description": "Create a new budget with items",
+        "tags": [
+          "Budget"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "budgetNumber": {
+                  "type": "string"
+                },
+                "clientId": {
+                  "type": "string"
+                },
+                "userId": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "productId": {
+                        "type": "string"
+                      },
+                      "quantity": {
+                        "type": "number"
+                      },
+                      "unitPrice": {
+                        "type": "number"
+                      },
+                      "totalPrice": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "productId",
+                      "quantity",
+                      "unitPrice"
+                    ]
+                  }
+                },
+                "total": {
+                  "type": "number"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "discountPercent": {
+                  "type": "number",
+                  "nullable": true
+                },
+                "discountValue": {
+                  "type": "number",
+                  "nullable": true
+                },
+                "subTotal": {
+                  "type": "number",
+                  "nullable": true
+                },
+                "paymentType": {
+                  "type": "string"
+                },
+                "installments": {
+                  "type": "number",
+                  "nullable": true
+                },
+                "additionalNotes": {
+                  "type": "string",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "budgetNumber",
+                "clientId",
+                "userId",
+                "title",
+                "items",
+                "total",
+                "status"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Budget created successfully with items",
+            "schema": {
+              "description": "Budget created successfully with items",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "budgetNumber": {
+                      "type": "string"
+                    },
+                    "clientId": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "budgetId": {
+                            "type": "string"
+                          },
+                          "productId": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "number"
+                          },
+                          "unitPrice": {
+                            "type": "number"
+                          },
+                          "totalPrice": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "discountPercent": {
+                      "type": "number",
+                      "nullable": true
+                    },
+                    "discountValue": {
+                      "type": "number",
+                      "nullable": true
+                    },
+                    "subTotal": {
+                      "type": "number",
+                      "nullable": true
+                    },
+                    "paymentType": {
+                      "type": "string"
+                    },
+                    "installments": {
+                      "type": "number",
+                      "nullable": true
+                    },
+                    "additionalNotes": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/budget/history": {
+      "post": {
+        "description": "Add history entry to a budget",
+        "tags": [
+          "Budget"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "budgetId": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "userId": {
+                  "type": "string"
+                },
+                "changeType": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "budgetId",
+                "description",
+                "userId",
+                "changeType"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Budget history added successfully",
+            "schema": {
+              "description": "Budget history added successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/budget/{budgetId}/item": {
+      "post": {
+        "description": "Add an item to a budget",
+        "tags": [
+          "Budget"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "budgetItem": {
+                  "type": "object",
+                  "properties": {
+                    "productId": {
+                      "type": "string"
+                    },
+                    "quantity": {
+                      "type": "number"
+                    },
+                    "unitPrice": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "productId",
+                    "quantity",
+                    "unitPrice"
+                  ]
+                }
+              },
+              "required": [
+                "budgetItem"
+              ]
+            }
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "budgetId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Item added to budget successfully",
+            "schema": {
+              "description": "Item added to budget successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/def-5"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/budget/{id}": {
+      "delete": {
+        "description": "Delete a budget by ID",
+        "tags": [
+          "Budget"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Budget deleted successfully",
+            "schema": {
+              "description": "Budget deleted successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Retrieve a budget by ID with items",
+        "tags": [
+          "Budget"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Budget retrieved successfully with items",
+            "schema": {
+              "description": "Budget retrieved successfully with items",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "budgetNumber": {
+                      "type": "string"
+                    },
+                    "clientId": {
+                      "type": "string"
+                    },
+                    "userId": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "budgetId": {
+                            "type": "string"
+                          },
+                          "productId": {
+                            "type": "string"
+                          },
+                          "quantity": {
+                            "type": "number"
+                          },
+                          "unitPrice": {
+                            "type": "number"
+                          },
+                          "totalPrice": {
+                            "type": "number"
+                          }
+                        }
+                      }
+                    },
+                    "total": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "discountPercent": {
+                      "type": "number",
+                      "nullable": true
+                    },
+                    "discountValue": {
+                      "type": "number",
+                      "nullable": true
+                    },
+                    "subTotal": {
+                      "type": "number",
+                      "nullable": true
+                    },
+                    "paymentType": {
+                      "type": "string"
+                    },
+                    "installments": {
+                      "type": "number",
+                      "nullable": true
+                    },
+                    "additionalNotes": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Update a budget by ID",
+        "tags": [
+          "Budget"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "total": {
+                  "type": "number"
+                },
+                "status": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Budget updated successfully",
+            "schema": {
+              "description": "Budget updated successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/def-5"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/budget/{budgetId}/history": {
+      "get": {
+        "description": "Retrieve history for a budget",
+        "tags": [
+          "Budget"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "budgetId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Budget history retrieved successfully",
+            "schema": {
+              "description": "Budget history retrieved successfully",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "changeType": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/budgets/client": {
+      "get": {
+        "description": "Retrieve budgets by client ID with items",
+        "tags": [
+          "Budget"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "query",
+            "name": "clientId"
+          },
+          {
+            "type": "number",
+            "required": false,
+            "in": "query",
+            "name": "page"
+          },
+          {
+            "type": "number",
+            "required": false,
+            "in": "query",
+            "name": "limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Budgets retrieved successfully with items",
+            "schema": {
+              "description": "Budgets retrieved successfully with items",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "budgetNumber": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "budgetId": {
+                              "type": "string"
+                            },
+                            "productId": {
+                              "type": "string"
+                            },
+                            "quantity": {
+                              "type": "number"
+                            },
+                            "unitPrice": {
+                              "type": "number"
+                            },
+                            "totalPrice": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "discountPercent": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "discountValue": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "subTotal": {
+                        "type": "number"
+                      },
+                      "total": {
+                        "type": "number"
+                      },
+                      "userId": {
+                        "type": "string"
+                      },
+                      "bonusId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "paymentType": {
+                        "type": "string"
+                      },
+                      "installments": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "additionalNotes": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "clientId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "total": {
+                  "type": "number"
+                },
+                "currentPage": {
+                  "type": "number"
+                },
+                "totalPages": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/budgets/user": {
+      "get": {
+        "description": "Retrieve budgets by user ID with items",
+        "tags": [
+          "Budget"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "query",
+            "name": "userId"
+          },
+          {
+            "type": "number",
+            "required": false,
+            "in": "query",
+            "name": "page"
+          },
+          {
+            "type": "number",
+            "required": false,
+            "in": "query",
+            "name": "limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Budgets retrieved successfully with items",
+            "schema": {
+              "description": "Budgets retrieved successfully with items",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "budgetNumber": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "items": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string"
+                            },
+                            "budgetId": {
+                              "type": "string"
+                            },
+                            "productId": {
+                              "type": "string"
+                            },
+                            "quantity": {
+                              "type": "number"
+                            },
+                            "unitPrice": {
+                              "type": "number"
+                            },
+                            "totalPrice": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string"
+                      },
+                      "discountPercent": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "discountValue": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "subTotal": {
+                        "type": "number"
+                      },
+                      "total": {
+                        "type": "number"
+                      },
+                      "userId": {
+                        "type": "string"
+                      },
+                      "bonusId": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "paymentType": {
+                        "type": "string"
+                      },
+                      "installments": {
+                        "type": "number",
+                        "nullable": true
+                      },
+                      "additionalNotes": {
+                        "type": "string",
+                        "nullable": true
+                      },
+                      "clientId": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "total": {
+                  "type": "number"
+                },
+                "currentPage": {
+                  "type": "number"
+                },
+                "totalPages": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/budget/{budgetId}/items": {
+      "get": {
+        "description": "Retrieve items for a specific budget",
+        "tags": [
+          "Budget"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "budgetId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Items retrieved successfully for the budget",
+            "schema": {
+              "description": "Items retrieved successfully for the budget",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "quantity": {
+                    "type": "number"
+                  },
+                  "price": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/budget/{budgetId}/item/{itemId}": {
+      "delete": {
+        "description": "Remove an item from a budget",
+        "tags": [
+          "Budget"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "budgetId"
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "itemId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Item removed from budget successfully",
+            "schema": {
+              "description": "Item removed from budget successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/budget/status": {
+      "patch": {
+        "description": "Update the status of a budget",
+        "tags": [
+          "Budget"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "budgetId": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "budgetId",
+                "status"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Budget status updated successfully",
+            "schema": {
+              "description": "Budget status updated successfully",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "host": "localhost:3333",
@@ -4595,6 +5554,10 @@
     {
       "name": "Notifications",
       "description": "Notification related endpoints"
+    },
+    {
+      "name": "Budget",
+      "description": "Budget related endpoints"
     }
   ]
 }
