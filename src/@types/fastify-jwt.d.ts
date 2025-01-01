@@ -1,3 +1,5 @@
+import '@fastify/jwt';
+
 declare module '@fastify/jwt' {
   interface FastifyJWT {
     user: {
@@ -8,6 +10,7 @@ declare module '@fastify/jwt' {
           name: string;
         }[];
       };
+      sub: string;
       permissions: string[];
     };
   }

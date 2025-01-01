@@ -5,6 +5,7 @@ import {
   getUserByIdController,
   updateUserController,
   deleteUserController,
+  profileController,
 } from '../controller';
 import { verifyJwt } from '@/utils/middlewares/verify-jwt';
 import { verifyUserRole } from '@/utils/middlewares/verify-user-role';
@@ -75,9 +76,7 @@ export async function usersRoutes(app: FastifyInstance) {
           409: {
             description: 'User with this email already exists',
             type: 'object',
-            properties: {
-              message: { type: 'string' },
-            },
+            properties: { message: { type: 'string' } },
           },
         },
       },
@@ -235,6 +234,7 @@ export async function usersRoutes(app: FastifyInstance) {
     updateUserController,
   );
 
+  // Rota para excluir um usuário por ID
   app.delete(
     '/users/:id',
     {
@@ -268,4 +268,6 @@ export async function usersRoutes(app: FastifyInstance) {
     },
     deleteUserController,
   );
+
+  app.get('/me', profileController);
 }

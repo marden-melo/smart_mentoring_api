@@ -563,6 +563,15 @@
         }
       }
     },
+    "/me": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Default Response"
+          }
+        }
+      }
+    },
     "/plan": {
       "post": {
         "description": "Create a new plan",
