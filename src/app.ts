@@ -22,11 +22,19 @@ import { subscriptionRoutes } from './modules/subscription/http/routes';
 import { subscriptionHistoryRoutes } from './modules/SubscriptionHistory/http/routes';
 import { notificationRoutes } from './modules/notifications/http/routes';
 import { budgetRoutes } from './modules/budget/http/routes';
+import fastifyCors from '@fastify/cors';
 
 export const app = fastify();
 
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
+});
+
+app.register(fastifyCors, {
+  origin: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
 });
 
 app.register(swagger, {
