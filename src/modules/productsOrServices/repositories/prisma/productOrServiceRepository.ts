@@ -57,8 +57,16 @@ export class ProductOrServiceRepository implements IProductOrServiceRepository {
   }
 
   async findAll(): Promise<ProductOrServiceDTO[]> {
-    const productsOrServices = await prisma.product.findMany();
-    return productsOrServices.map((item) => item);
+    const productsOrServices = await prisma.product.findMany({
+      include: {
+        category: true,
+      },
+    });
+
+    return productsOrServices.map((item) => ({
+      ...item,
+      category: item.category,
+    }));
   }
 
   async update(data: UpdateProductOrServiceDTO): Promise<ProductOrServiceDTO> {
