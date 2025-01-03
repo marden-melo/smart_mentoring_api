@@ -83,6 +83,13 @@ export async function productOrServiceRoutes(app: FastifyInstance) {
                   properties: {
                     id: { type: 'string' },
                     categoryId: { type: 'string' },
+                    category: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string' },
+                        name: { type: 'string' },
+                      },
+                    },
                     name: { type: 'string' },
                     price: { type: 'number' },
                     quantity: { type: 'number' },

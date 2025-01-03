@@ -91,8 +91,14 @@ export class ProductOrServiceRepository implements IProductOrServiceRepository {
     const productsOrServices = await prisma.product.findMany({
       skip: offset,
       take: limit,
+      include: {
+        category: true,
+      },
     });
-    return productsOrServices.map((item) => item);
+    return productsOrServices.map((item) => ({
+      ...item,
+      category: item.category,
+    }));
   }
 
   async countProductOrService(): Promise<number> {
