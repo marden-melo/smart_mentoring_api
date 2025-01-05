@@ -1,6 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 import { ProductOrServiceRepository } from '../repositories/prisma/productOrServiceRepository';
-import { ProductOrServiceDTO } from '../dtos/productsOrServicesDTO';
+import { ProductOrServiceResponseDTO } from '../dtos/productsOrServicesDTO';
 import { ResourceNotFoundError } from '@/utils/errors/resourceNotFoundError';
 
 @injectable()
@@ -10,7 +10,7 @@ export class GetProductOrServiceByIdUseCase {
     private productOrServiceRepository: ProductOrServiceRepository,
   ) {}
 
-  async execute(id: string): Promise<ProductOrServiceDTO | null> {
+  async execute(id: string): Promise<ProductOrServiceResponseDTO | null> {
     const result = await this.productOrServiceRepository.findById(id);
 
     if (!result) {

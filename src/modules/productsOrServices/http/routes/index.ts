@@ -177,7 +177,6 @@ export async function productOrServiceRoutes(app: FastifyInstance) {
     },
     getAllServicesController,
   );
-
   app.get(
     '/product-or-service/:id',
     {
@@ -206,6 +205,13 @@ export async function productOrServiceRoutes(app: FastifyInstance) {
                   quantity: { type: 'number' },
                   type: { type: 'string' },
                   description: { type: 'string' },
+                  category: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string' },
+                      name: { type: 'string' },
+                    },
+                  },
                 },
               },
             },

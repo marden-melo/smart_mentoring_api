@@ -1,12 +1,13 @@
 import {
   CreateProductOrServiceDTO,
   ProductOrServiceDTO,
+  ProductOrServiceResponseDTO,
   UpdateProductOrServiceDTO,
 } from '../dtos/productsOrServicesDTO';
 
 export interface IProductOrServiceRepository {
   create(data: CreateProductOrServiceDTO): Promise<ProductOrServiceDTO>;
-  findById(id: string): Promise<ProductOrServiceDTO | null>;
+  findById(id: string): Promise<ProductOrServiceResponseDTO | null>;
   findAll(): Promise<ProductOrServiceDTO[]>;
   update(data: UpdateProductOrServiceDTO): Promise<ProductOrServiceDTO>;
   delete(id: string): Promise<void>;

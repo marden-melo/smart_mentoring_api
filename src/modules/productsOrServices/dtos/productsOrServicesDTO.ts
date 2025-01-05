@@ -30,3 +30,16 @@ export interface ProductOrServiceDTO {
   type: ProductType;
   quantity: number;
 }
+
+export interface ProductOrServiceResponseDTO {
+  id: string;
+  name: string;
+  description?: string | null;
+  price: number;
+  category: {
+    id: string;
+    name: string;
+  };
+  type: ProductType;
+  quantity: number;
+}

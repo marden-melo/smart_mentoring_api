@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import {
   CreateProductOrServiceDTO,
   ProductOrServiceDTO,
+  ProductOrServiceResponseDTO,
   UpdateProductOrServiceDTO,
 } from '../../dtos/productsOrServicesDTO';
 import { ProductType } from '@prisma/client';
@@ -14,7 +15,7 @@ export class ProductOrServiceRepository implements IProductOrServiceRepository {
     });
   }
 
-  async findById(id: string): Promise<ProductOrServiceDTO | null> {
+  async findById(id: string): Promise<ProductOrServiceResponseDTO | null> {
     const productOrService = await prisma.product.findUnique({
       where: { id },
       include: {
