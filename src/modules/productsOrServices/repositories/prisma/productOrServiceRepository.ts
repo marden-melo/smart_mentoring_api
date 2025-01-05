@@ -15,7 +15,12 @@ export class ProductOrServiceRepository implements IProductOrServiceRepository {
   }
 
   async findById(id: string): Promise<ProductOrServiceDTO | null> {
-    const productOrService = await prisma.product.findUnique({ where: { id } });
+    const productOrService = await prisma.product.findUnique({
+      where: { id },
+      include: {
+        category: true,
+      },
+    });
     return productOrService;
   }
 
