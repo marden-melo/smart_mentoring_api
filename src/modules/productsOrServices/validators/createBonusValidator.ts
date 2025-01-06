@@ -23,4 +23,5 @@ export const productOrServiceSchema = z.object({
   quantity: z.number().int().min(0).optional(),
   type: z.string().optional(),
   description: z.string().optional(),
+  categoryId: z.string().optional(),
 });

@@ -269,7 +269,7 @@ export async function updateProductOrServiceController(
   try {
     const { id } = idSchema.parse(request.params);
 
-    const { name, price, quantity, type, description } =
+    const { name, price, quantity, type, description, categoryId } =
       productOrServiceSchema.parse(request.body);
 
     const updateData: any = {};
@@ -279,7 +279,7 @@ export async function updateProductOrServiceController(
     if (quantity !== undefined) updateData.quantity = quantity;
     if (type) updateData.type = type;
     if (description) updateData.description = description;
-
+    if (categoryId) updateData.categoryId = categoryId;
     const updateProductOrServiceUseCase = container.resolve(
       UpdateProductOrServiceUseCase,
     );

@@ -243,6 +243,7 @@ export async function productOrServiceRoutes(app: FastifyInstance) {
             quantity: { type: 'number' },
             type: { type: 'string' },
             description: { type: 'string' },
+            categoryId: { type: 'string' },
           },
         },
         response: {
