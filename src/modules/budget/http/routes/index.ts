@@ -36,7 +36,7 @@ export async function budgetRoutes(app: FastifyInstance) {
     '/budget',
     {
       schema: {
-        description: 'Create a new budget with items',
+        description: 'Create a new budget with items and documents',
         tags: ['Budget'],
         body: {
           type: 'object',
@@ -66,6 +66,20 @@ export async function budgetRoutes(app: FastifyInstance) {
             paymentType: { type: 'string' },
             installments: { type: 'number', nullable: true },
             additionalNotes: { type: 'string', nullable: true },
+            bonusId: { type: 'string', nullable: true },
+            documents: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  fileName: { type: 'string' },
+                  fileType: { type: 'string' },
+                  filePath: { type: 'string' },
+                },
+                required: ['fileName', 'fileType', 'filePath'],
+              },
+              nullable: true,
+            },
           },
           required: [
             'budgetNumber',
@@ -76,49 +90,6 @@ export async function budgetRoutes(app: FastifyInstance) {
             'total',
             'status',
           ],
-        },
-        response: {
-          201: {
-            description: 'Budget created successfully with items',
-            type: 'object',
-            properties: {
-              message: { type: 'string' },
-              data: {
-                type: 'object',
-                properties: {
-                  id: { type: 'string' },
-                  budgetNumber: { type: 'string' },
-                  clientId: { type: 'string' },
-                  userId: { type: 'string' },
-                  title: { type: 'string' },
-                  items: {
-                    type: 'array',
-                    items: {
-                      type: 'object',
-                      properties: {
-                        id: { type: 'string' },
-                        budgetId: { type: 'string' },
-                        productId: { type: 'string' },
-                        quantity: { type: 'number' },
-                        unitPrice: { type: 'number' },
-                        totalPrice: { type: 'number' },
-                      },
-                    },
-                  },
-                  total: { type: 'number' },
-                  status: { type: 'string' },
-                  discountPercent: { type: 'number', nullable: true },
-                  discountValue: { type: 'number', nullable: true },
-                  subTotal: { type: 'number', nullable: true },
-                  paymentType: { type: 'string' },
-                  installments: { type: 'number', nullable: true },
-                  additionalNotes: { type: 'string', nullable: true },
-                  createdAt: { type: 'string', format: 'date-time' },
-                  updatedAt: { type: 'string', format: 'date-time' },
-                },
-              },
-            },
-          },
         },
       },
     },
@@ -543,7 +514,7 @@ export async function budgetRoutes(app: FastifyInstance) {
     '/budget/:id',
     {
       schema: {
-        description: 'Update a budget by ID',
+        description: 'Update an existing budget by ID',
         tags: ['Budget'],
         params: {
           type: 'object',
@@ -555,10 +526,47 @@ export async function budgetRoutes(app: FastifyInstance) {
         body: {
           type: 'object',
           properties: {
+            budgetNumber: { type: 'string' },
             title: { type: 'string' },
-            total: { type: 'number' },
+            description: { type: 'string' },
             status: { type: 'string' },
+            discountPercent: { type: 'number', nullable: true },
+            discountValue: { type: 'number', nullable: true },
+            subTotal: { type: 'number', nullable: true },
+            total: { type: 'number' },
+            paymentType: { type: 'string' },
+            installments: { type: 'number', nullable: true },
+            additionalNotes: { type: 'string', nullable: true },
+            bonusId: { type: 'string', nullable: true },
+            items: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  productId: { type: 'string' },
+                  quantity: { type: 'number' },
+                  unitPrice: { type: 'number' },
+                  totalPrice: { type: 'number' },
+                },
+                required: ['productId', 'quantity', 'unitPrice'],
+              },
+              nullable: true,
+            },
+            documents: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  fileName: { type: 'string' },
+                  fileType: { type: 'string' },
+                  filePath: { type: 'string' },
+                },
+                required: ['fileName', 'fileType', 'filePath'],
+              },
+              nullable: true,
+            },
           },
+          required: ['budgetNumber', 'title', 'status', 'total'],
         },
         response: {
           200: {
@@ -566,7 +574,40 @@ export async function budgetRoutes(app: FastifyInstance) {
             type: 'object',
             properties: {
               message: { type: 'string' },
-              data: { $ref: 'Budget#' },
+              data: {
+                type: 'object',
+                properties: {
+                  id: { type: 'string' },
+                  budgetNumber: { type: 'string' },
+                  clientId: { type: 'string' },
+                  userId: { type: 'string' },
+                  title: { type: 'string' },
+                  items: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string' },
+                        budgetId: { type: 'string' },
+                        productId: { type: 'string' },
+                        quantity: { type: 'number' },
+                        unitPrice: { type: 'number' },
+                        totalPrice: { type: 'number' },
+                      },
+                    },
+                  },
+                  total: { type: 'number' },
+                  status: { type: 'string' },
+                  discountPercent: { type: 'number', nullable: true },
+                  discountValue: { type: 'number', nullable: true },
+                  subTotal: { type: 'number', nullable: true },
+                  paymentType: { type: 'string' },
+                  installments: { type: 'number', nullable: true },
+                  additionalNotes: { type: 'string', nullable: true },
+                  createdAt: { type: 'string', format: 'date-time' },
+                  updatedAt: { type: 'string', format: 'date-time' },
+                },
+              },
             },
           },
         },

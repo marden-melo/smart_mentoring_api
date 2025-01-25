@@ -10,10 +10,16 @@ export class CreateBudgetUseCase {
   ) {}
 
   async execute(data: CreateBudgetDTO) {
-    const budget = await this.budgetRepository.createBudget(data);
+    const { items, documents, ...budgetData } = data;
+
+    const createdBudget = await this.budgetRepository.createBudget({
+      ...budgetData,
+      items,
+      documents,
+    });
 
     return {
-      data: budget,
+      data: createdBudget,
     };
   }
 }

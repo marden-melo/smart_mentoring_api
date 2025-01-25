@@ -31,6 +31,15 @@ export const createBudgetSchema = z.object({
   ),
   budgetNumber: z.string(),
   userId: z.string(),
+  documents: z
+    .array(
+      z.object({
+        fileName: z.string(),
+        fileType: z.string(),
+        filePath: z.string(),
+      }),
+    )
+    .optional(),
 });
 
 export const updateBudgetSchema = z.object({

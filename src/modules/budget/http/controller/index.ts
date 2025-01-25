@@ -43,7 +43,13 @@ export async function createBudgetController(
       status,
       subTotal,
       total,
+      documents,
     } = createBudgetSchema.parse(request.body);
+
+    const documentsWithBudgetId = documents?.map((doc) => ({
+      ...doc,
+      budgetId: budgetNumber,
+    }));
 
     const createBudgetUseCase = container.resolve(CreateBudgetUseCase);
 
@@ -63,6 +69,7 @@ export async function createBudgetController(
       status,
       subTotal,
       total,
+      documents: documentsWithBudgetId,
     });
 
     reply.status(201).send({
@@ -351,9 +358,7 @@ export async function updateBudgetStatusController(
 }
 
 export async function updateBudgetController(
-  request: FastifyRequest<{
-    Body: { budgetId: string; data: any };
-  }>,
+  request: FastifyRequest<{ Body: { budgetId: string; data: any } }>,
   reply: FastifyReply,
 ) {
   try {

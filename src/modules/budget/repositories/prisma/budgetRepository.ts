@@ -18,7 +18,7 @@ import { prisma } from '@/lib/prisma';
 
 export class BudgetRepository implements IBudgetRepository {
   async createBudget(createBudgetDTO: CreateBudgetDTO): Promise<Budget> {
-    const { items, budgetNumber, ...budgetData } = createBudgetDTO;
+    const { items, documents, budgetNumber, ...budgetData } = createBudgetDTO;
 
     const createdBudget = await prisma.budget.create({
       data: {
@@ -32,10 +32,19 @@ export class BudgetRepository implements IBudgetRepository {
             totalPrice: item.quantity * item.unitPrice,
           })),
         },
+        Document: {
+          create:
+            documents?.map((doc) => ({
+              fileName: doc.fileName,
+              fileType: doc.fileType,
+              filePath: doc.filePath,
+              budgetId: doc.budgetId,
+            })) || [],
+        },
       },
-
       include: {
         items: true,
+        Document: true,
       },
     });
 
@@ -73,6 +82,23 @@ export class BudgetRepository implements IBudgetRepository {
         ...updateBudgetDTO,
         bonusId: updateBudgetDTO.bonusId ?? null,
         items: itemsData,
+        Document: updateBudgetDTO.documents
+          ? {
+              upsert: updateBudgetDTO.documents.map((doc) => ({
+                where: { id: doc.id },
+                create: {
+                  fileName: doc.fileName,
+                  fileType: doc.fileType,
+                  filePath: doc.filePath,
+                },
+                update: {
+                  fileName: doc.fileName,
+                  fileType: doc.fileType,
+                  filePath: doc.filePath,
+                },
+              })),
+            }
+          : undefined,
       },
     });
 

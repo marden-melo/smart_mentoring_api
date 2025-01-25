@@ -1,4 +1,4 @@
-import { PaymentType, BudgetStatus, ProductType } from '@prisma/client';
+import { PaymentType, BudgetStatus } from '@prisma/client';
 
 export interface CreateBudgetDTO {
   title: string;
@@ -16,12 +16,27 @@ export interface CreateBudgetDTO {
   items: BudgetItemDTO[];
   budgetNumber: string;
   userId: string;
+  documents?: CreateDocumentInputDTO[];
 }
 
 export interface BudgetItemDTO {
   productId: string;
   quantity: number;
   unitPrice: number;
+}
+
+export interface DocumentInputDTO {
+  id?: string;
+  fileName: string;
+  filePath: string;
+  fileType: string;
+}
+
+export interface CreateDocumentInputDTO {
+  budgetId: string;
+  fileName: string;
+  fileType: string;
+  filePath: string;
 }
 
 export interface UpdateBudgetDTO {
@@ -39,6 +54,7 @@ export interface UpdateBudgetDTO {
   bonusId?: string | null;
   items?: BudgetItemDTO[];
   budgetNumber?: string;
+  documents?: DocumentInputDTO[];
 }
 
 export interface BudgetFilterDTO {

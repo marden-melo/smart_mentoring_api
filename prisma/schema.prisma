@@ -158,17 +158,22 @@ model Client {
 }
 
 model Budget {
-  id              String       @id @default(uuid())
-  createdAt       DateTime     @default(now()) @map("created_at")
-  updatedAt       DateTime     @updatedAt @map("updated_at")
-  budgetNumber    String       @unique @map("budget_number")
-  title           String
-  description     String?
-  status          BudgetStatus @default(PENDING)
-  discountPercent Float?       @map("discount_percent")
-  discountValue   Float?       @map("discount_value")
-  subTotal        Float?       @map("sub_total")
-  total           Float?
+  id                         String       @id @default(uuid())
+  createdAt                  DateTime     @default(now()) @map("created_at")
+  updatedAt                  DateTime     @updatedAt @map("updated_at")
+  budgetNumber               String       @unique @map("budget_number")
+  title                      String
+  description                String?
+  status                     BudgetStatus @default(PENDING)
+  discountPercent            Float?       @map("discount_percent")
+  discountValue              Float?       @map("discount_value")
+  subTotal                   Float?       @map("sub_total")
+  total                      Float?
+  finalValueWithInstallments Float?
+  bonusValue                 Float?
+  paymentType                PaymentType
+  installments               Int?
+  additionalNotes            String?      @map("additional_notes")
 
   userId String
   user   User   @relation(fields: [userId], references: [id])
@@ -176,20 +181,31 @@ model Budget {
   bonusId String?
   bonus   Bonus?  @relation(fields: [bonusId], references: [id])
 
-  items BudgetItem[]
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id])
 
-  paymentType     PaymentType
-  installments    Int?
-  additionalNotes String?     @map("additional_notes")
-
-  paymentPlan   PaymentPlan[]
-  BudgetHistory BudgetHistory[]
-  CustomField   CustomField[]
-  Document      Document[]
-  clientId      String
-  client        Client          @relation(fields: [clientId], references: [id])
+  items          BudgetItem[]
+  paymentPlan    PaymentPlan[]
+  BudgetHistory  BudgetHistory[]
+  CustomField    CustomField[]
+  Document       Document[]
+  paymentDetails PaymentDetails[]
 
   @@map("budgets")
+}
+
+model PaymentDetails {
+  id           String      @id @default(uuid())
+  budgetId     String
+  budget       Budget      @relation(fields: [budgetId], references: [id])
+  paymentType  PaymentType
+  installments Int?
+  fees         Float?
+  observation  String?
+  totalValue   Float
+  createdAt    DateTime    @default(now()) @map("created_at")
+
+  @@map("payment_details")
 }
 
 model BudgetItem {
@@ -288,7 +304,9 @@ model Document {
   filePath   String
   fileName   String
   fileType   String
-  uploadedAt DateTime @default(now())
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+
+  @@map("documents")
 }
 
 model Subscription {
