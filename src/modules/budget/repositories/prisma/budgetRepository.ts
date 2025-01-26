@@ -38,7 +38,6 @@ export class BudgetRepository implements IBudgetRepository {
               fileName: doc.fileName,
               fileType: doc.fileType,
               filePath: doc.filePath,
-              budgetId: doc.budgetId,
             })) || [],
         },
       },
