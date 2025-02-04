@@ -1,11 +1,4 @@
-import { Role } from '@prisma/client';
-
 export interface RoleDTO {
+  id?: string;
   name: string;
 }
-
-export interface RoleUseCaseResponse {
-  data: Role | Role[];
-}
-
-export type UpdateRoleDTO = Partial<RoleDTO>;

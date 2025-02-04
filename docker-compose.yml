@@ -3,11 +3,11 @@ version: '3.8'
 services:
   postgres:
     image: bitnami/postgresql:latest
-    container_name: postgres_container_quoth
+    container_name: postgres_container_smartmentoring
     environment:
-      - POSTGRESQL_USERNAME=quoth
-      - POSTGRESQL_PASSWORD=quoth@2024
-      - POSTGRESQL_DATABASE=quoth_api
+      - POSTGRESQL_USERNAME=smartmentoring
+      - POSTGRESQL_PASSWORD=smartmentoring@2025
+      - POSTGRESQL_DATABASE=smartmentoring_api
     ports:
       - '5432:5432'
     volumes:

@@ -7,81 +7,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum BudgetStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
-
-enum PaymentStatus {
-  PENDING
-  COMPLETED
-  FAILED
-}
-
-enum PaymentType {
-  PIX
-  CREDIT_CARD
-  DEBIT_CARD
-  BOLETO
-  CASH
-}
-
-enum RoleType {
-  ADMIN
-  MANAGER
-  USER
-  FINANCE
-  AUDITOR
-}
-
-enum ClientType {
-  COMPANY
-  INDIVIDUAL
-}
-
-enum ProductType {
-  PRODUCT
-  SERVICE
-}
-
-enum SubscriptionStatus {
-  ACTIVE
-  PENDING
-  EXPIRED
-  CANCELLED
-  PAUSED
-  AWAITING_RENEWAL
-}
-
-enum PaymentInterval {
-  MONTHLY
-  ANNUALLY
-  WEEKLY
-}
-
 model User {
-  id            String         @id @default(uuid())
-  createdAt     DateTime       @default(now()) @map("created_at")
-  updatedAt     DateTime       @updatedAt @map("updated_at")
-  name          String
-  email         String         @unique
-  password      String
-  roleId        String
-  planId        String?
-  testStartDate DateTime?
-  isActive      Boolean        @default(true)
-  role          Role           @relation(fields: [roleId], references: [id])
-  plan          Plan?          @relation(fields: [planId], references: [id])
-  notifications Notification[]
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  name      String
+  email     String   @unique
+  password  String
+  phone     String?
+  avatar    String?
+  bio       String?
+  roleId    String
+  isActive  Boolean  @default(true)
+  role      Role     @relation(fields: [roleId], references: [id])
 
-  budgets       Budget[]
-  payments      Payment[]
-  auditLogs     AuditLog[]
-  BudgetHistory BudgetHistory[]
-  Subscription  Subscription[]
-
-  @@map("users")
+  mentor       Mentor?     @relation("MentorUser")
+  consultant   Consultant? @relation("ConsultantUser")
+  mentorId     String?
+  consultantId String?
 }
 
 model Role {
@@ -90,280 +33,51 @@ model Role {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users       User[]
-  permissions RolePermission[]
+  users User[]
 
   @@map("roles")
 }
 
-model Permission {
-  id          String   @id @default(uuid())
-  name        String   @unique
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  rolePermissions RolePermission[]
-
-  @@map("permissions")
+model Mentor {
+  id             String   @id @default(uuid())
+  user           User     @relation("MentorUser", fields: [userId], references: [id])
+  userId         String   @unique
+  area           String
+  specialization String
+  availableSlots String[]
+  experience     String?
+  successStories String?
+  certifications String?
+  projects       String?
+  methods        String?
+  strategy       String?
+  tools          String?
+  methodologies  String?
 }
 
-model RolePermission {
-  id           String   @id @default(uuid())
-  roleId       String
-  permissionId String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  role       Role       @relation(fields: [roleId], references: [id])
-  permission Permission @relation(fields: [permissionId], references: [id])
-
-  @@map("role_permissions")
+model Consultant {
+  id                String   @id @default(uuid())
+  user              User     @relation("ConsultantUser", fields: [userId], references: [id])
+  userId            String   @unique
+  area              String
+  specialization    String
+  availableSlots    String[]
+  experience        String?
+  successStories    String?
+  certifications    String?
+  projects          String?
+  methods           String?
+  professionalSince DateTime
+  strategy          String?
+  tools             String?
+  methodologies     String?
+  prices            Price[]
 }
 
-model Plan {
-  id        String   @id @default(uuid())
-  name      String   @unique
-  price     Float
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  users         User[]
-  subscriptions Subscription[]
-
-  @@map("plans")
-}
-
-model Client {
-  id          String     @id @default(uuid())
-  createdAt   DateTime   @default(now()) @map("created_at")
-  updatedAt   DateTime   @updatedAt @map("updated_at")
-  clientType  ClientType
-  cnpj        String?    @unique
-  companyName String?    @map("company_name")
-  cpf         String?    @unique
-  fullName    String?    @map("full_name")
-  phone       String
-  email       String     @unique
-  street      String?
-  district    String?
-  city        String?
-  number      String?
-  state       String?
-  cep         String?
-  responsable String?
-  budgets     Budget[]
-
-  @@map("clients")
-}
-
-model Budget {
-  id                         String       @id @default(uuid())
-  createdAt                  DateTime     @default(now()) @map("created_at")
-  updatedAt                  DateTime     @updatedAt @map("updated_at")
-  budgetNumber               String       @unique @map("budget_number")
-  title                      String
-  description                String?
-  status                     BudgetStatus @default(PENDING)
-  discountPercent            Float?       @map("discount_percent")
-  discountValue              Float?       @map("discount_value")
-  subTotal                   Float?       @map("sub_total")
-  total                      Float?
-  finalValueWithInstallments Float?
-  bonusValue                 Float?
-  paymentType                PaymentType
-  installments               Int?
-  additionalNotes            String?      @map("additional_notes")
-
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  bonusId String?
-  bonus   Bonus?  @relation(fields: [bonusId], references: [id])
-
-  clientId String
-  client   Client @relation(fields: [clientId], references: [id])
-
-  items          BudgetItem[]
-  paymentPlan    PaymentPlan[]
-  BudgetHistory  BudgetHistory[]
-  CustomField    CustomField[]
-  Document       Document[]
-  paymentDetails PaymentDetails[]
-
-  @@map("budgets")
-}
-
-model PaymentDetails {
-  id           String      @id @default(uuid())
-  budgetId     String
-  budget       Budget      @relation(fields: [budgetId], references: [id])
-  paymentType  PaymentType
-  installments Int?
-  fees         Float?
-  observation  String?
-  totalValue   Float
-  createdAt    DateTime    @default(now()) @map("created_at")
-
-  @@map("payment_details")
-}
-
-model BudgetItem {
-  id         String  @id @default(uuid())
-  budgetId   String
-  productId  String
-  quantity   Int
-  unitPrice  Float
-  totalPrice Float
-  product    Product @relation(fields: [productId], references: [id])
-  budget     Budget  @relation(fields: [budgetId], references: [id], onDelete: Cascade)
-
-  @@unique([productId, budgetId])
-  @@map("budget_items")
-}
-
-model Bonus {
-  id          String   @id @default(uuid())
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-  description String   @map("description")
-  percentage  Float?   @map("percentage")
-  value       Float?   @map("value")
-  budgets     Budget[]
-
-  @@map("bonuses")
-}
-
-model PaymentPlan {
-  id           String @id @default(uuid())
-  description  String
-  value        Float
-  monthlyFee   Float?
-  contractTerm Int?
-  budgetId     String
-  budget       Budget @relation(fields: [budgetId], references: [id])
-
-  @@map("payment_plans")
-}
-
-model Product {
-  id          String       @id @default(uuid())
-  name        String
-  description String?
-  price       Float
-  categoryId  String
-  category    Category     @relation(fields: [categoryId], references: [id])
-  budgetItems BudgetItem[]
-  type        ProductType  @default(PRODUCT)
-  quantity    Int
-
-  @@map("products")
-}
-
-model Category {
-  id          String    @id @default(uuid())
-  name        String    @unique
-  description String?
-  products    Product[]
-
-  @@map("categories")
-}
-
-model BudgetHistory {
-  id          String   @id @default(uuid())
-  budgetId    String
-  budget      Budget   @relation(fields: [budgetId], references: [id])
-  changeType  String
-  description String?
-  changedById String
-  changedBy   User     @relation(fields: [changedById], references: [id])
-  createdAt   DateTime @default(now())
-}
-
-model Notification {
-  id        String   @id @default(uuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  message   String
-  isRead    Boolean  @default(false)
-  createdAt DateTime @default(now())
-}
-
-model CustomField {
-  id       String @id @default(uuid())
-  budgetId String
-  budget   Budget @relation(fields: [budgetId], references: [id])
-  name     String
-  value    String
-}
-
-model Document {
-  id         String   @id @default(uuid())
-  budgetId   String
-  budget     Budget   @relation(fields: [budgetId], references: [id])
-  filePath   String
-  fileName   String
-  fileType   String
-  uploadedAt DateTime @default(now()) @map("uploaded_at")
-
-  @@map("documents")
-}
-
-model Subscription {
-  id                String             @id @default(uuid())
-  userId            String
-  user              User               @relation(fields: [userId], references: [id])
-  planId            String
-  plan              Plan               @relation(fields: [planId], references: [id])
-  startDate         DateTime           @default(now())
-  endDate           DateTime?
-  isActive          Boolean            @default(true)
-  autoRenew         Boolean            @default(false)
-  status            SubscriptionStatus @default(ACTIVE)
-  renewalDate       DateTime?
-  cancellationDate  DateTime?
-  trialEndDate      DateTime?
-  lastPaymentDate   DateTime?
-  nextPaymentDate   DateTime?
-  paymentInterval   PaymentInterval    @default(MONTHLY)
-  paymentGateway    String?
-  externalReference String?
-
-  SubscriptionHistory SubscriptionHistory[]
-
-  @@map("subscriptions")
-}
-
-model SubscriptionHistory {
-  id             String       @id @default(uuid())
-  subscriptionId String
-  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
-  oldPlanId      String
-  newPlanId      String
-  changedAt      DateTime     @default(now())
-}
-
-model Payment {
-  id               String        @id @default(uuid())
-  createdAt        DateTime      @default(now()) @map("created_at")
-  updatedAt        DateTime      @updatedAt @map("updated_at")
-  amount           Float
-  status           PaymentStatus @default(PENDING)
-  userId           String
-  user             User          @relation(fields: [userId], references: [id])
-  gatewayReference String?       @map("gateway_reference")
-  gatewayStatus    String?       @map("gateway_status")
-
-  @@map("payments")
-}
-
-model AuditLog {
-  id          String   @id @default(uuid())
-  action      String
-  description String?
-  userId      String
-  user        User     @relation(fields: [userId], references: [id])
-  createdAt   DateTime @default(now()) @map("created_at")
-
-  @@map("audit_logs")
+model Price {
+  id           String     @id @default(uuid())
+  consultantId String
+  consultant   Consultant @relation(fields: [consultantId], references: [id])
+  price        Float
+  unit         String
 }
