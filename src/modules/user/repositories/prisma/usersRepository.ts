@@ -3,19 +3,19 @@ import { IUsersRepository } from '../IUserRepository';
 import { prisma } from '@/lib/prisma';
 
 export class UsersRepository implements IUsersRepository {
-  async findById(id: string) {
-    const user = await prisma.user.findUnique({
-      where: {
-        id,
-      },
-    });
-
-    return user;
-  }
-
   async create(data: Prisma.UserCreateInput) {
     const user = await prisma.user.create({
       data,
+      include: {
+        role: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        mentor: true,
+        consultant: true,
+      },
     });
 
     return user;
@@ -26,13 +26,34 @@ export class UsersRepository implements IUsersRepository {
       where: {
         email,
       },
+      include: {
+        role: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        mentor: true,
+        consultant: true,
+      },
     });
 
     return user;
   }
 
   async findAll() {
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      include: {
+        role: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        mentor: true,
+        consultant: true,
+      },
+    });
     return users;
   }
 
@@ -40,6 +61,34 @@ export class UsersRepository implements IUsersRepository {
     const user = await prisma.user.update({
       where: { id },
       data,
+      include: {
+        role: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        mentor: true,
+        consultant: true,
+      },
+    });
+
+    return user;
+  }
+
+  async findById(id: string) {
+    const user = await prisma.user.findUnique({
+      where: { id },
+      include: {
+        role: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        mentor: true,
+        consultant: true,
+      },
     });
     return user;
   }
@@ -48,6 +97,16 @@ export class UsersRepository implements IUsersRepository {
     const users = await prisma.user.findMany({
       skip: offset,
       take: limit,
+      include: {
+        role: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        mentor: true,
+        consultant: true,
+      },
     });
     return users;
   }

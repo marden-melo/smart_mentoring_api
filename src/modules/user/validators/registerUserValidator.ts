@@ -15,7 +15,6 @@ const userValidationSchema = z.object({
     .min(8, 'Password must be at least 8 characters long.')
     .max(255, 'Password can be at most 255 characters long.'),
   roleId: z.string().uuid('Invalid UUID format for role ID.'),
-  isActive: z.boolean().default(true),
 });
 
 export default userValidationSchema;

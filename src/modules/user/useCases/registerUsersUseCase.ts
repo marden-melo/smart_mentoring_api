@@ -4,25 +4,15 @@ import { UsersRepository } from '../repositories/prisma/usersRepository';
 import { UserAlreadyExistsError } from '@/utils/errors/userAlreadyExistsError';
 import { CreateUserDTO } from '../dtos/usersDTO';
 import { RoleRepository } from '@/modules/role/repositories/prisma/roleRepository';
-import { PlanRepository } from '@/modules/plan/repositories/prisma/planRepository';
 
 @injectable()
 export class RegisterUsersUseCase {
   constructor(
     @inject('UsersRepository') private usersRepository: UsersRepository,
     @inject('RoleRepository') private roleRepository: RoleRepository,
-    @inject('PlanRepository') private planRepository: PlanRepository,
   ) {}
 
-  async execute({
-    email,
-    name,
-    password,
-    roleId,
-    isActive,
-    planId,
-    testStartDate,
-  }: CreateUserDTO) {
+  async execute({ email, name, password, roleId }: CreateUserDTO) {
     if (!password) {
       throw new Error('Password is required');
     }
@@ -32,17 +22,10 @@ export class RegisterUsersUseCase {
       throw new UserAlreadyExistsError();
     }
 
-    const role = await this.roleRepository.findById(roleId);
+    const userRole = roleId || 'USER';
+    const role = await this.roleRepository.findById(userRole);
     if (!role) {
       throw new Error('Role not found');
-    }
-
-    let plan;
-    if (planId) {
-      plan = await this.planRepository.findById(planId);
-      if (!plan) {
-        throw new Error('Plan not found');
-      }
     }
 
     const password_hash = await hash(password, 6);
@@ -51,14 +34,19 @@ export class RegisterUsersUseCase {
       name,
       email,
       password: password_hash,
-      isActive,
-      testStartDate,
-      plan: plan ? { connect: { id: planId } } : undefined,
-      role: { connect: { id: roleId } },
+      role: { connect: { id: role.id } },
     });
 
     return {
-      data: user,
+      data: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        roleId: user.role.id,
+        roleName: user.role.name,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
     };
   }
 }

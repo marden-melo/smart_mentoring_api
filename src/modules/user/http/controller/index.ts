@@ -3,12 +3,11 @@ import { container } from 'tsyringe';
 import registerUserBodySchema from '../../validators/registerUserValidator';
 import { UserAlreadyExistsError } from '@/utils/errors/userAlreadyExistsError';
 import { RegisterUsersUseCase } from '../../useCases/registerUsersUseCase';
-import { convertToDate } from '@/utils/helpers/formatStringToDate';
 import { GetAllUsersUseCase } from '../../useCases/getAllUsersUseCase';
 import { GetByIdUsersUseCase } from '../../useCases/getByIdUsersUseCase';
 import { DeleteUsersUseCase } from '../../useCases/deleteUserUseCase';
 import { User } from '@prisma/client';
-import { UpdateUserUseCase } from '../../useCases/updateUsersUseCase';
+import { UpdateUserWithRoleUseCase } from '../../useCases/updateUserWithRoleUseCase';
 import { UserNotFoundError } from '@/utils/errors/userNotFoundError';
 import { GetUserProfileUseCase } from '../../useCases/getUserProfileUseCase';
 
@@ -17,8 +16,9 @@ export async function registerUserController(
   reply: FastifyReply,
 ) {
   try {
-    const { email, name, password, isActive, roleId } =
-      registerUserBodySchema.parse(request.body);
+    const { email, name, password, roleId } = registerUserBodySchema.parse(
+      request.body,
+    );
 
     const registerUsersUseCase = container.resolve(RegisterUsersUseCase);
 
@@ -26,7 +26,6 @@ export async function registerUserController(
       email,
       name,
       password,
-      isActive,
       roleId,
     });
 
@@ -44,12 +43,10 @@ export async function registerUserController(
       console.error('Error details:', error.stack);
     }
 
-    return reply
-      .status(500)
-      .send({
-        error: 'Internal server error',
-        details: error.message || 'Unknown error',
-      });
+    return reply.status(500).send({
+      error: 'Internal server error',
+      details: error.message || 'Unknown error',
+    });
   }
 }
 
@@ -58,11 +55,19 @@ export async function getAllUsersController(
   reply: FastifyReply,
 ) {
   try {
+    const { page, limit } = request.query as { page?: number; limit?: number };
     const getAllUsersUseCase = container.resolve(GetAllUsersUseCase);
-    const { data: users, total } = await getAllUsersUseCase.execute();
+    const {
+      data: users,
+      total,
+      currentPage,
+      totalPages,
+    } = await getAllUsersUseCase.execute(page || 1, limit || 10);
 
     reply.status(200).send({
       total,
+      currentPage,
+      totalPages,
       data: users,
     });
   } catch (e) {
@@ -83,6 +88,10 @@ export async function getUserByIdController(
     const getByIdUsersUseCase = container.resolve(GetByIdUsersUseCase);
     const user = await getByIdUsersUseCase.execute(id);
 
+    if (!user) {
+      return reply.status(404).send({ error: 'User not found' });
+    }
+
     reply.status(200).send({ data: user });
   } catch (e) {
     console.error('Error caught:', e);
@@ -99,19 +108,27 @@ export async function updateUserController(
 ) {
   try {
     const { id } = request.params as { id: string };
-    const data = request.body as Partial<User>;
+    const { data, roleType, additionalData } = request.body as {
+      data: Partial<User>;
+      roleType: 'MENTOR' | 'CONSULTANT';
+      additionalData: any;
+    };
 
-    const updateUserUseCase = container.resolve(UpdateUserUseCase);
-    const updatedUser = await updateUserUseCase.execute(id, data);
+    const updateUserWithRoleUseCase = container.resolve(
+      UpdateUserWithRoleUseCase,
+    );
+    const result = await updateUserWithRoleUseCase.execute(
+      id,
+      data,
+      roleType,
+      additionalData,
+    );
 
     reply
       .status(200)
-      .send({ message: 'User updated successfully', data: updatedUser });
+      .send({ message: 'User updated successfully', data: result });
   } catch (e) {
     console.error('Error caught:', e);
-    if (e instanceof UserNotFoundError) {
-      return reply.status(409).send({ message: e.message });
-    }
     const error = e as Error;
     return reply
       .status(500)

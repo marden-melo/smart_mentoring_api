@@ -19,40 +19,36 @@ export async function authenticateController(
   try {
     const user = await prisma.user.findUnique({
       where: { email },
-      include: {
-        role: {
-          include: {
-            permissions: {
-              include: {
-                permission: true,
-              },
-            },
-          },
-        },
-      },
+      include: { role: true },
     });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!user) {
       throw new InvalidCredentialsError();
     }
 
-    const rolePermissions = user.role.permissions.map(
-      (rolePermission) => rolePermission.permission.name,
-    );
+    const passwordIsValid = await bcrypt.compare(password, user.password);
+    if (!passwordIsValid) {
+      throw new InvalidCredentialsError();
+    }
 
     const token = await reply.jwtSign(
-      { role: user.role.name, permissions: rolePermissions },
+      { role: user.role.name },
       { sign: { sub: user.id } },
     );
 
     return reply.status(200).send({
+      message: 'Authentication successful',
       token,
     });
-  } catch (err) {
+  } catch (err: any) {
     if (err instanceof InvalidCredentialsError) {
-      return reply.status(400).send({ message: err.message });
+      return reply.status(401).send({ message: err.message });
     }
 
-    throw err;
+    console.error('Unexpected error:', err);
+    return reply.status(500).send({
+      error: 'Internal Server Error',
+      details: err.message || 'Unexpected error occurred',
+    });
   }
 }

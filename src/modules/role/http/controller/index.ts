@@ -18,7 +18,7 @@ export async function createRolesController(
 
     const createRolesUseCase = container.resolve(CreateRoleUseCase);
 
-    const { data: role } = await createRolesUseCase.execute({
+    const role = await createRolesUseCase.execute({
       name,
     });
 

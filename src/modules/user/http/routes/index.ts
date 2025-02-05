@@ -35,20 +35,6 @@ export async function usersRoutes(app: FastifyInstance) {
               description: 'Password for the user',
             },
             roleId: { type: 'string', description: 'Role ID of the user' },
-            planId: {
-              type: 'string',
-              description: 'Optional plan ID of the user',
-            },
-            testStartDate: {
-              type: 'string',
-              format: 'date-time',
-              description: 'Test start date',
-            },
-            isActive: {
-              type: 'boolean',
-              description: 'Status of user activity',
-              default: true,
-            },
           },
         },
         response: {
@@ -64,9 +50,7 @@ export async function usersRoutes(app: FastifyInstance) {
                   name: { type: 'string' },
                   email: { type: 'string' },
                   roleId: { type: 'string' },
-                  planId: { type: 'string' },
-                  testStartDate: { type: 'string', format: 'date-time' },
-                  isActive: { type: 'boolean' },
+                  roleName: { type: 'string' },
                   createdAt: { type: 'string', format: 'date-time' },
                   updatedAt: { type: 'string', format: 'date-time' },
                 },
@@ -88,7 +72,8 @@ export async function usersRoutes(app: FastifyInstance) {
     '/users',
     {
       schema: {
-        description: 'Retrieve all users',
+        description:
+          'Retrieve all users with full details (Role, Mentor, Consultant)',
         tags: ['Users'],
         querystring: {
           type: 'object',
@@ -99,10 +84,12 @@ export async function usersRoutes(app: FastifyInstance) {
         },
         response: {
           200: {
-            description: 'List of all users',
+            description: 'List of all users with full details',
             type: 'object',
             properties: {
               total: { type: 'integer' },
+              currentPage: { type: 'integer' },
+              totalPages: { type: 'integer' },
               data: {
                 type: 'array',
                 items: {
@@ -111,12 +98,62 @@ export async function usersRoutes(app: FastifyInstance) {
                     id: { type: 'string' },
                     name: { type: 'string' },
                     email: { type: 'string' },
-                    roleId: { type: 'string' },
-                    planId: { type: 'string' },
-                    testStartDate: { type: 'string', format: 'date-time' },
+                    phone: { type: 'string' },
+                    avatar: { type: 'string' },
+                    bio: { type: 'string' },
                     isActive: { type: 'boolean' },
                     createdAt: { type: 'string', format: 'date-time' },
                     updatedAt: { type: 'string', format: 'date-time' },
+                    role: {
+                      type: 'object',
+                      properties: {
+                        id: { type: 'string' },
+                        name: { type: 'string' },
+                      },
+                    },
+                    mentor: {
+                      type: 'object',
+                      nullable: true,
+                      properties: {
+                        id: { type: 'string' },
+                        area: { type: 'string' },
+                        specialization: { type: 'string' },
+                        availableSlots: {
+                          type: 'array',
+                          items: { type: 'string' },
+                        },
+                        experience: { type: 'string' },
+                        successStories: { type: 'string' },
+                        certifications: { type: 'string' },
+                        projects: { type: 'string' },
+                        methods: { type: 'string' },
+                        strategy: { type: 'string' },
+                        tools: { type: 'string' },
+                        methodologies: { type: 'string' },
+                      },
+                    },
+                    consultant: {
+                      type: 'object',
+                      nullable: true,
+                      properties: {
+                        id: { type: 'string' },
+                        area: { type: 'string' },
+                        specialization: { type: 'string' },
+                        availableSlots: {
+                          type: 'array',
+                          items: { type: 'string' },
+                        },
+                        experience: { type: 'string' },
+                        successStories: { type: 'string' },
+                        certifications: { type: 'string' },
+                        projects: { type: 'string' },
+                        methods: { type: 'string' },
+                        professionalSince: { type: 'string' },
+                        strategy: { type: 'string' },
+                        tools: { type: 'string' },
+                        methodologies: { type: 'string' },
+                      },
+                    },
                   },
                 },
               },
@@ -132,7 +169,8 @@ export async function usersRoutes(app: FastifyInstance) {
     '/users/:id',
     {
       schema: {
-        description: 'Retrieve a user by ID',
+        description:
+          'Retrieve a user by ID with full details (Role, Mentor, Consultant)',
         tags: ['Users'],
         params: {
           type: 'object',
@@ -151,12 +189,62 @@ export async function usersRoutes(app: FastifyInstance) {
                   id: { type: 'string' },
                   name: { type: 'string' },
                   email: { type: 'string' },
-                  roleId: { type: 'string' },
-                  planId: { type: 'string' },
-                  testStartDate: { type: 'string', format: 'date-time' },
+                  phone: { type: 'string' },
+                  avatar: { type: 'string' },
+                  bio: { type: 'string' },
                   isActive: { type: 'boolean' },
                   createdAt: { type: 'string', format: 'date-time' },
                   updatedAt: { type: 'string', format: 'date-time' },
+                  role: {
+                    type: 'object',
+                    properties: {
+                      id: { type: 'string' },
+                      name: { type: 'string' },
+                    },
+                  },
+                  mentor: {
+                    type: 'object',
+                    nullable: true,
+                    properties: {
+                      id: { type: 'string' },
+                      area: { type: 'string' },
+                      specialization: { type: 'string' },
+                      availableSlots: {
+                        type: 'array',
+                        items: { type: 'string' },
+                      },
+                      experience: { type: 'string' },
+                      successStories: { type: 'string' },
+                      certifications: { type: 'string' },
+                      projects: { type: 'string' },
+                      methods: { type: 'string' },
+                      strategy: { type: 'string' },
+                      tools: { type: 'string' },
+                      methodologies: { type: 'string' },
+                    },
+                  },
+                  consultant: {
+                    type: 'object',
+                    nullable: true,
+                    properties: {
+                      id: { type: 'string' },
+                      area: { type: 'string' },
+                      specialization: { type: 'string' },
+                      availableSlots: {
+                        type: 'array',
+                        items: { type: 'string' },
+                      },
+                      experience: { type: 'string' },
+                      successStories: { type: 'string' },
+                      certifications: { type: 'string' },
+                      projects: { type: 'string' },
+                      methods: { type: 'string' },
+                      professionalSince: { type: 'string' },
+                      strategy: { type: 'string' },
+                      tools: { type: 'string' },
+                      methodologies: { type: 'string' },
+                    },
+                  },
                 },
               },
             },
@@ -170,16 +258,15 @@ export async function usersRoutes(app: FastifyInstance) {
           },
         },
       },
-      onRequest: [verifyUserRole('ADMIN')],
     },
     getUserByIdController,
   );
 
   app.put(
-    '/users/:id',
+    '/users/:id/role',
     {
       schema: {
-        description: 'Update a user by ID',
+        description: 'Update the role of a user to MENTOR or CONSULTANT',
         tags: ['Users'],
         params: {
           type: 'object',
@@ -189,18 +276,23 @@ export async function usersRoutes(app: FastifyInstance) {
         },
         body: {
           type: 'object',
+          required: ['roleType'],
           properties: {
-            name: { type: 'string' },
-            email: { type: 'string', format: 'email' },
-            roleId: { type: 'string' },
-            planId: { type: 'string' },
-            testStartDate: { type: 'string', format: 'date-time' },
-            isActive: { type: 'boolean' },
+            roleType: {
+              type: 'string',
+              enum: ['MENTOR', 'CONSULTANT'],
+              description: 'Role to assign to the user',
+            },
+            additionalData: {
+              type: 'object',
+              description:
+                'Additional data for the role (e.g., experience, area, etc.)',
+            },
           },
         },
         response: {
           200: {
-            description: 'User updated successfully',
+            description: 'User role updated successfully',
             type: 'object',
             properties: {
               message: { type: 'string' },
@@ -211,11 +303,51 @@ export async function usersRoutes(app: FastifyInstance) {
                   name: { type: 'string' },
                   email: { type: 'string' },
                   roleId: { type: 'string' },
-                  planId: { type: 'string' },
-                  testStartDate: { type: 'string', format: 'date-time' },
-                  isActive: { type: 'boolean' },
+                  roleName: { type: 'string' },
                   createdAt: { type: 'string', format: 'date-time' },
                   updatedAt: { type: 'string', format: 'date-time' },
+                  phone: { type: 'string' },
+                  avatar: { type: 'string' },
+                  bio: { type: 'string' },
+                  mentor: {
+                    type: 'object',
+                    properties: {
+                      area: { type: 'string' },
+                      specialization: { type: 'string' },
+                      availableSlots: {
+                        type: 'array',
+                        items: { type: 'string' },
+                      },
+                      experience: { type: 'string' },
+                      successStories: { type: 'string' },
+                      certifications: { type: 'string' },
+                      projects: { type: 'string' },
+                      methods: { type: 'string' },
+                      strategy: { type: 'string' },
+                      tools: { type: 'string' },
+                      methodologies: { type: 'string' },
+                    },
+                  },
+                  consultant: {
+                    type: 'object',
+                    properties: {
+                      area: { type: 'string' },
+                      specialization: { type: 'string' },
+                      availableSlots: {
+                        type: 'array',
+                        items: { type: 'string' },
+                      },
+                      experience: { type: 'string' },
+                      successStories: { type: 'string' },
+                      certifications: { type: 'string' },
+                      projects: { type: 'string' },
+                      methods: { type: 'string' },
+                      professionalSince: { type: 'string' },
+                      strategy: { type: 'string' },
+                      tools: { type: 'string' },
+                      methodologies: { type: 'string' },
+                    },
+                  },
                 },
               },
             },
@@ -229,12 +361,10 @@ export async function usersRoutes(app: FastifyInstance) {
           },
         },
       },
-      onRequest: [verifyUserRole('ADMIN')],
     },
     updateUserController,
   );
 
-  // Rota para excluir um usuário por ID
   app.delete(
     '/users/:id',
     {
