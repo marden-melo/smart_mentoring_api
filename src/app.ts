@@ -10,6 +10,7 @@ import { usersRoutes } from './modules/user/http/routes';
 import fastifyJwt from 'fastify-jwt';
 import { authRoute } from './modules/authentication/http/routes';
 import fastifyCors from '@fastify/cors';
+import { expertiseAreaRoutes } from './modules/expertiseArea/http/routes';
 
 export const app = fastify();
 
@@ -37,8 +38,11 @@ app.register(swagger, {
     produces: ['application/json'],
     tags: [
       { name: 'Users', description: 'User related endpoints' },
-
       { name: 'Role', description: 'Role related endpoints' },
+      {
+        name: 'Expertise Area',
+        description: 'Expertise Area related endpoints',
+      },
     ],
   },
 });
@@ -57,6 +61,7 @@ app.ready((err) => {
 app.register(authRoute);
 app.register(usersRoutes);
 app.register(rolesRoutes);
+app.register(expertiseAreaRoutes);
 
 app.setErrorHandler((error, request, reply) => {
   if (error instanceof ZodError) {

@@ -21,6 +21,22 @@
         "name"
       ],
       "title": "Role"
+    },
+    "def-1": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ],
+      "title": "ExpertiseArea"
     }
   },
   "paths": {
@@ -905,6 +921,211 @@
           }
         }
       }
+    },
+    "/expertise-area": {
+      "post": {
+        "description": "Creates a new Expertise Area",
+        "tags": [
+          "Expertise Area"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Expertise Area successfully created",
+            "schema": {
+              "description": "Expertise Area successfully created",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/def-1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Lists all Expertise Areas",
+        "tags": [
+          "Expertise Area"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Expertise Areas",
+            "schema": {
+              "description": "List of Expertise Areas",
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/def-1"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/expertise-area/{id}": {
+      "get": {
+        "description": "Retrieves an Expertise Area by ID",
+        "tags": [
+          "Expertise Area"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expertise Area details",
+            "schema": {
+              "description": "Expertise Area details",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/def-1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Expertise Area not found",
+            "schema": {
+              "description": "Expertise Area not found",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Updates an Expertise Area",
+        "tags": [
+          "Expertise Area"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expertise Area successfully updated",
+            "schema": {
+              "description": "Expertise Area successfully updated",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/def-1"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Expertise Area not found",
+            "schema": {
+              "description": "Expertise Area not found",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletes an Expertise Area by ID",
+        "tags": [
+          "Expertise Area"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Expertise Area successfully deleted",
+            "schema": {
+              "description": "Expertise Area successfully deleted",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Expertise Area not found",
+            "schema": {
+              "description": "Expertise Area not found",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "host": "localhost:3333",
@@ -925,6 +1146,10 @@
     {
       "name": "Role",
       "description": "Role related endpoints"
+    },
+    {
+      "name": "Expertise Area",
+      "description": "Expertise Area related endpoints"
     }
   ]
 }

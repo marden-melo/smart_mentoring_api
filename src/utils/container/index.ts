@@ -5,9 +5,12 @@ import { RoleRepository } from '@/modules/role/repositories/prisma/roleRepositor
 import { IUsersRepository } from '@/modules/user/repositories/IUserRepository';
 import { UsersRepository } from '@/modules/user/repositories/prisma/usersRepository';
 import { IUserMentorRepository } from '@/modules/user/repositories/IUserMentorRepository';
-import { UserMentorRepository } from '@/modules/user/repositories/prisma/usermentorRepository';
+
 import { IUserConsultantRepository } from '@/modules/user/repositories/IUserConsultantRepository';
 import { UserConsultantRepository } from '@/modules/user/repositories/prisma/userConsultantRepository';
+import { UserMentorRepository } from '@/modules/user/repositories/prisma/userMentorRepository';
+import { IExpertiseAreaRepository } from '@/modules/expertiseArea/repositories/IExpertiseAreaRepository';
+import { ExpertiseAreaRepository } from '@/modules/expertiseArea/repositories/prisma/expertiseAreaRepository';
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -25,3 +28,8 @@ container.registerSingleton<IUserConsultantRepository>(
 );
 
 container.registerSingleton<IRoleRepository>('RoleRepository', RoleRepository);
+
+container.registerSingleton<IExpertiseAreaRepository>(
+  'ExpertiseAreaRepository',
+  ExpertiseAreaRepository,
+);
