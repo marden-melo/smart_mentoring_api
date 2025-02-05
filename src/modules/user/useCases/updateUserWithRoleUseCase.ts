@@ -1,7 +1,6 @@
 import { injectable, inject } from 'tsyringe';
 import { UsersRepository } from '../repositories/prisma/usersRepository';
-import { User } from '@prisma/client';
-import { RoleType } from '@prisma/client';
+import { User, RoleType } from '@prisma/client';
 import { UserMentorRepository } from '../repositories/prisma/userMentorRepository';
 import { UserConsultantRepository } from '../repositories/prisma/userConsultantRepository';
 import { prisma } from '@/lib/prisma';
@@ -20,9 +19,9 @@ export class UpdateUserWithRoleUseCase {
     userId: string,
     data: Partial<User>,
     roleType: RoleType,
-    additionalData: any,
+    additionalData: { expertiseIds: string[]; [key: string]: any },
   ): Promise<any> {
-    const updatedUser = await this.usersRepository.update(userId, data);
+    await this.usersRepository.update(userId, data);
 
     const updatedRole = await prisma.role.findUnique({
       where: { name: roleType },
@@ -51,24 +50,44 @@ export class UpdateUserWithRoleUseCase {
       );
     }
 
+    if (
+      !additionalData.expertiseIds ||
+      additionalData.expertiseIds.length === 0
+    ) {
+      throw new Error(`${roleType} must have at least one area of expertise.`);
+    }
+
     if (roleType === 'MENTOR') {
+      const { expertiseIds, ...mentorFields } = additionalData;
       await this.mentorRepository.upsert({
         where: { userId },
-        update: { ...additionalData },
-        create: { user: { connect: { id: userId } }, ...additionalData },
+        update: mentorFields,
+        create: { user: { connect: { id: userId } }, ...mentorFields },
+        expertiseIds,
       });
     }
 
     if (roleType === 'CONSULTANT') {
+      const { expertiseIds, professionalSince, ...consultantFields } =
+        additionalData;
+
+      if (!professionalSince) {
+        throw new Error('Consultant must have a professionalSince date.');
+      }
+
       await this.consultantRepository.upsert({
         where: { userId },
-        update: { ...additionalData },
-        create: { user: { connect: { id: userId } }, ...additionalData },
+        update: consultantFields,
+        create: {
+          user: { connect: { id: userId } },
+          professionalSince: new Date(professionalSince),
+          ...consultantFields,
+        },
+        expertiseIds,
       });
     }
 
     const userWithFullData = await this.usersRepository.findById(userId);
-
     return userWithFullData;
   }
 }

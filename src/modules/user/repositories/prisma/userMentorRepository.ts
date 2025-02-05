@@ -5,20 +5,42 @@ import { prisma } from '@/lib/prisma';
 export class UserMentorRepository implements IUserMentorRepository {
   async upsert(data: {
     where: { userId: string };
-
     update: Partial<Mentor>;
     create: Prisma.MentorCreateInput;
+    expertiseIds: string[];
   }): Promise<Mentor> {
     return prisma.mentor.upsert({
       where: data.where,
-      update: data.update,
-      create: data.create,
+      update: {
+        ...data.update,
+        expertiseAreas: {
+          deleteMany: {},
+          create: data.expertiseIds.map((expertiseId) => ({
+            expertiseArea: { connect: { id: expertiseId } },
+          })),
+        },
+      },
+      create: {
+        ...data.create,
+        expertiseAreas: {
+          create: data.expertiseIds.map((expertiseId) => ({
+            expertiseArea: { connect: { id: expertiseId } },
+          })),
+        },
+      },
     });
   }
 
   async findByUserId(userId: string): Promise<Mentor | null> {
     return prisma.mentor.findUnique({
       where: { userId },
+      include: {
+        expertiseAreas: {
+          include: {
+            expertiseArea: true,
+          },
+        },
+      },
     });
   }
 

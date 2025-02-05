@@ -8,17 +8,40 @@ export class UserConsultantRepository implements IUserConsultantRepository {
     where: { userId: string };
     update: Partial<Consultant>;
     create: Prisma.ConsultantCreateInput;
+    expertiseIds: string[];
   }): Promise<Consultant> {
     return prisma.consultant.upsert({
       where: data.where,
-      update: data.update,
-      create: data.create,
+      update: {
+        ...data.update,
+        expertiseAreas: {
+          deleteMany: {},
+          create: data.expertiseIds.map((expertiseId) => ({
+            expertiseArea: { connect: { id: expertiseId } },
+          })),
+        },
+      },
+      create: {
+        ...data.create,
+        expertiseAreas: {
+          create: data.expertiseIds.map((expertiseId) => ({
+            expertiseArea: { connect: { id: expertiseId } },
+          })),
+        },
+      },
     });
   }
 
   async findByUserId(userId: string): Promise<Consultant | null> {
     return prisma.consultant.findUnique({
       where: { userId },
+      include: {
+        expertiseAreas: {
+          include: {
+            expertiseArea: true,
+          },
+        },
+      },
     });
   }
 

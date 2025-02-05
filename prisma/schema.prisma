@@ -14,6 +14,21 @@ enum RoleType {
   ADMIN
 }
 
+enum PriceUnit {
+  HOUR
+  DAY
+  WEEK
+  MONTH
+  YEAR
+}
+
+enum EventStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+}
+
 model User {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now()) @map("created_at")
@@ -26,12 +41,16 @@ model User {
   bio       String?
   roleId    String
   isActive  Boolean  @default(true)
-  role      Role     @relation(fields: [roleId], references: [id])
 
-  mentor       Mentor?     @relation("MentorUser")
-  consultant   Consultant? @relation("ConsultantUser")
-  mentorId     String?
-  consultantId String?
+  role Role @relation(fields: [roleId], references: [id])
+
+  mentor     Mentor?     @relation("MentorUser")
+  consultant Consultant? @relation("ConsultantUser")
+
+  meetings           Meeting[]
+  watchedContents    UserContent[]
+  eventParticipation EventParticipant[]
+  createdEvents      Event[]            @relation("EventCreator")
 }
 
 model Role {
@@ -46,12 +65,11 @@ model Role {
 }
 
 model Mentor {
-  id             String   @id @default(uuid())
-  user           User     @relation("MentorUser", fields: [userId], references: [id])
-  userId         String   @unique
-  area           String
-  specialization String
-  availableSlots String[]
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation("MentorUser", fields: [userId], references: [id])
+
+  bio            String?
   experience     String?
   successStories String?
   certifications String?
@@ -60,15 +78,19 @@ model Mentor {
   strategy       String?
   tools          String?
   methodologies  String?
+  availableSlots String[] @default([])
+
+  expertiseAreas MentorExpertise[]
+  prices         Price[]
+  meetings       Meeting[]
 }
 
 model Consultant {
-  id                String   @id @default(uuid())
-  user              User     @relation("ConsultantUser", fields: [userId], references: [id])
-  userId            String   @unique
-  area              String
-  specialization    String
-  availableSlots    String[]
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation("ConsultantUser", fields: [userId], references: [id])
+
+  bio               String?
   experience        String?
   successStories    String?
   certifications    String?
@@ -78,13 +100,125 @@ model Consultant {
   strategy          String?
   tools             String?
   methodologies     String?
-  prices            Price[]
+  availableSlots    String[] @default([])
+
+  expertiseAreas ConsultantExpertise[]
+  prices         Price[]
+  meetings       Meeting[]
+}
+
+model ExpertiseArea {
+  id   String @id @default(uuid())
+  name String @unique
+
+  mentorExpertise     MentorExpertise[]
+  consultantExpertise ConsultantExpertise[]
+}
+
+model MentorExpertise {
+  mentorId      String
+  mentor        Mentor        @relation(fields: [mentorId], references: [id])
+  expertiseId   String
+  expertiseArea ExpertiseArea @relation(fields: [expertiseId], references: [id])
+
+  @@id([mentorId, expertiseId])
+}
+
+model ConsultantExpertise {
+  consultantId  String
+  consultant    Consultant    @relation(fields: [consultantId], references: [id])
+  expertiseId   String
+  expertiseArea ExpertiseArea @relation(fields: [expertiseId], references: [id])
+
+  @@id([consultantId, expertiseId])
 }
 
 model Price {
-  id           String     @id @default(uuid())
-  consultantId String
-  consultant   Consultant @relation(fields: [consultantId], references: [id])
+  id           String    @id @default(uuid())
+  mentorId     String?
+  consultantId String?
   price        Float
-  unit         String
+  unit         PriceUnit
+
+  mentor     Mentor?     @relation(fields: [mentorId], references: [id])
+  consultant Consultant? @relation(fields: [consultantId], references: [id])
+}
+
+model Meeting {
+  id           String   @id @default(uuid())
+  title        String
+  date         DateTime
+  status       String   @default("Agendado")
+  link         String?
+  mentorId     String?
+  consultantId String?
+  userId       String
+  createdAt    DateTime @default(now())
+
+  mentor     Mentor?     @relation(fields: [mentorId], references: [id])
+  consultant Consultant? @relation(fields: [consultantId], references: [id])
+  user       User        @relation(fields: [userId], references: [id])
+}
+
+model Event {
+  id          String      @id @default(uuid())
+  title       String
+  description String?
+  startTime   DateTime
+  endTime     DateTime
+  meetingLink String?
+  status      EventStatus @default(SCHEDULED)
+  createdById String
+
+  createdBy    User               @relation("EventCreator", fields: [createdById], references: [id])
+  locationId   String?
+  location     EventLocation?     @relation(fields: [locationId], references: [id])
+  participants EventParticipant[]
+}
+
+model EventParticipant {
+  userId  String
+  eventId String
+
+  user  User  @relation(fields: [userId], references: [id])
+  event Event @relation(fields: [eventId], references: [id])
+
+  @@id([userId, eventId])
+}
+
+model EventLocation {
+  id       String  @id @default(uuid())
+  name     String
+  address  String?
+  capacity Int?
+  events   Event[]
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String @unique
+
+  contents Content[]
+}
+
+model Content {
+  id          String @id @default(uuid())
+  title       String
+  description String
+  videoUrl    String
+  categoryId  String
+
+  category  Category      @relation(fields: [categoryId], references: [id])
+  watchedBy UserContent[]
+}
+
+model UserContent {
+  userId    String
+  contentId String
+  watchedAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  content Content @relation(fields: [contentId], references: [id])
+
+  @@id([userId, contentId])
 }

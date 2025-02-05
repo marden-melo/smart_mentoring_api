@@ -3,7 +3,7 @@ import { IUsersRepository } from '../IUserRepository';
 import { prisma } from '@/lib/prisma';
 
 export class UsersRepository implements IUsersRepository {
-  async create(data: Prisma.UserCreateInput) {
+  async create(data: Prisma.UserCreateInput): Promise<User> {
     const user = await prisma.user.create({
       data,
       include: {
@@ -13,19 +13,28 @@ export class UsersRepository implements IUsersRepository {
             name: true,
           },
         },
-        mentor: true,
-        consultant: true,
+        mentor: {
+          include: {
+            expertiseAreas: {
+              include: { expertiseArea: true },
+            },
+          },
+        },
+        consultant: {
+          include: {
+            expertiseAreas: {
+              include: { expertiseArea: true },
+            },
+          },
+        },
       },
     });
-
     return user;
   }
 
-  async findByEmail(email: string) {
+  async findByEmail(email: string): Promise<User | null> {
     const user = await prisma.user.findUnique({
-      where: {
-        email,
-      },
+      where: { email },
       include: {
         role: {
           select: {
@@ -33,15 +42,26 @@ export class UsersRepository implements IUsersRepository {
             name: true,
           },
         },
-        mentor: true,
-        consultant: true,
+        mentor: {
+          include: {
+            expertiseAreas: {
+              include: { expertiseArea: true },
+            },
+          },
+        },
+        consultant: {
+          include: {
+            expertiseAreas: {
+              include: { expertiseArea: true },
+            },
+          },
+        },
       },
     });
-
     return user;
   }
 
-  async findAll() {
+  async findAll(): Promise<User[]> {
     const users = await prisma.user.findMany({
       include: {
         role: {
@@ -50,14 +70,29 @@ export class UsersRepository implements IUsersRepository {
             name: true,
           },
         },
-        mentor: true,
-        consultant: true,
+        mentor: {
+          include: {
+            expertiseAreas: {
+              include: { expertiseArea: true },
+            },
+          },
+        },
+        consultant: {
+          include: {
+            expertiseAreas: {
+              include: { expertiseArea: true },
+            },
+          },
+        },
       },
     });
     return users;
   }
 
-  async update(id: string, data: Partial<Prisma.UserUpdateInput>) {
+  async update(
+    id: string,
+    data: Partial<Prisma.UserUpdateInput>,
+  ): Promise<User> {
     const user = await prisma.user.update({
       where: { id },
       data,
@@ -68,26 +103,38 @@ export class UsersRepository implements IUsersRepository {
             name: true,
           },
         },
-        mentor: true,
-        consultant: true,
+        mentor: {
+          include: {
+            expertiseAreas: {
+              include: { expertiseArea: true },
+            },
+          },
+        },
+        consultant: {
+          include: {
+            expertiseAreas: {
+              include: { expertiseArea: true },
+            },
+          },
+        },
       },
     });
-
     return user;
   }
 
-  async findById(id: string) {
+  async findById(id: string): Promise<User | null> {
     const user = await prisma.user.findUnique({
       where: { id },
       include: {
         role: {
-          select: {
-            id: true,
-            name: true,
-          },
+          select: { id: true, name: true },
         },
-        mentor: true,
-        consultant: true,
+        mentor: {
+          include: { expertiseAreas: { include: { expertiseArea: true } } },
+        },
+        consultant: {
+          include: { expertiseAreas: { include: { expertiseArea: true } } },
+        },
       },
     });
     return user;
@@ -99,28 +146,26 @@ export class UsersRepository implements IUsersRepository {
       take: limit,
       include: {
         role: {
-          select: {
-            id: true,
-            name: true,
-          },
+          select: { id: true, name: true },
         },
-        mentor: true,
-        consultant: true,
+        mentor: {
+          include: { expertiseAreas: { include: { expertiseArea: true } } },
+        },
+        consultant: {
+          include: { expertiseAreas: { include: { expertiseArea: true } } },
+        },
       },
     });
     return users;
   }
 
   async countUsers(): Promise<number> {
-    const total = await prisma.user.count();
-    return total;
+    return prisma.user.count();
   }
 
   async delete(id: string): Promise<void> {
     await prisma.user.delete({
-      where: {
-        id,
-      },
+      where: { id },
     });
   }
 }
