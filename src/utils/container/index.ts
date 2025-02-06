@@ -13,6 +13,8 @@ import { IExpertiseAreaRepository } from '@/modules/expertiseArea/repositories/I
 import { ExpertiseAreaRepository } from '@/modules/expertiseArea/repositories/prisma/expertiseAreaRepository';
 import { IMentorExpertiseRepository } from '@/modules/mentorExpertise/repositories/IMentorExpertiseRepository';
 import { MentorExpertiseRepository } from '@/modules/mentorExpertise/repositories/prisma/mentorExpertiseRepository';
+import { IConsultantExpertiseRepository } from '@/modules/consultantExpertise/repositories/IConsultantExpertiseRepository';
+import { ConsultantExpertiseRepository } from '@/modules/consultantExpertise/repositories/prisma/consultantExpertiseRepository';
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -39,4 +41,9 @@ container.registerSingleton<IExpertiseAreaRepository>(
 container.registerSingleton<IMentorExpertiseRepository>(
   'MentorExpertiseRepository',
   MentorExpertiseRepository,
+);
+
+container.registerSingleton<IConsultantExpertiseRepository>(
+  'ConsultantExpertiseRepository',
+  ConsultantExpertiseRepository,
 );
