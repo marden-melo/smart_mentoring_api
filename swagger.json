@@ -37,6 +37,26 @@
         "name"
       ],
       "title": "ExpertiseArea"
+    },
+    "def-2": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "mentorId": {
+          "type": "string"
+        },
+        "expertiseId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "mentorId",
+        "expertiseId"
+      ],
+      "title": "MentorExpertise"
     }
   },
   "paths": {
@@ -1126,6 +1146,168 @@
           }
         }
       }
+    },
+    "/mentor-expertise": {
+      "post": {
+        "description": "Creates a new Mentor Expertise",
+        "tags": [
+          "Mentor Expertise"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "mentorId": {
+                  "type": "string"
+                },
+                "expertiseId": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "mentorId",
+                "expertiseId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Mentor Expertise successfully created",
+            "schema": {
+              "description": "Mentor Expertise successfully created",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/def-2"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Lists all Mentor Expertise",
+        "tags": [
+          "Mentor Expertise"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Mentor Expertise",
+            "schema": {
+              "description": "List of Mentor Expertise",
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/def-2"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mentor-expertise/{id}": {
+      "get": {
+        "description": "Retrieves a Mentor Expertise by ID",
+        "tags": [
+          "Mentor Expertise"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mentor Expertise details",
+            "schema": {
+              "description": "Mentor Expertise details",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/def-2"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Mentor Expertise not found",
+            "schema": {
+              "description": "Mentor Expertise not found",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mentor-expertise/{mentorId}/{expertiseId}": {
+      "delete": {
+        "description": "Deletes a Mentor Expertise by Mentor ID and Expertise ID",
+        "tags": [
+          "Mentor Expertise"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "mentorId"
+          },
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "expertiseId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Mentor Expertise successfully deleted",
+            "schema": {
+              "description": "Mentor Expertise successfully deleted",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Mentor Expertise not found",
+            "schema": {
+              "description": "Mentor Expertise not found",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "host": "localhost:3333",
@@ -1150,6 +1332,10 @@
     {
       "name": "Expertise Area",
       "description": "Expertise Area related endpoints"
+    },
+    {
+      "name": "Mentor Expertise",
+      "description": "Mentor Expertise related endpoints"
     }
   ]
 }

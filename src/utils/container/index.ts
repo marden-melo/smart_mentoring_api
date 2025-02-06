@@ -11,6 +11,8 @@ import { UserConsultantRepository } from '@/modules/user/repositories/prisma/use
 import { UserMentorRepository } from '@/modules/user/repositories/prisma/userMentorRepository';
 import { IExpertiseAreaRepository } from '@/modules/expertiseArea/repositories/IExpertiseAreaRepository';
 import { ExpertiseAreaRepository } from '@/modules/expertiseArea/repositories/prisma/expertiseAreaRepository';
+import { IMentorExpertiseRepository } from '@/modules/mentorExpertise/repositories/IMentorExpertiseRepository';
+import { MentorExpertiseRepository } from '@/modules/mentorExpertise/repositories/prisma/mentorExpertiseRepository';
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -32,4 +34,9 @@ container.registerSingleton<IRoleRepository>('RoleRepository', RoleRepository);
 container.registerSingleton<IExpertiseAreaRepository>(
   'ExpertiseAreaRepository',
   ExpertiseAreaRepository,
+);
+
+container.registerSingleton<IMentorExpertiseRepository>(
+  'MentorExpertiseRepository',
+  MentorExpertiseRepository,
 );

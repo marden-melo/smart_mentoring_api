@@ -11,6 +11,7 @@ import fastifyJwt from 'fastify-jwt';
 import { authRoute } from './modules/authentication/http/routes';
 import fastifyCors from '@fastify/cors';
 import { expertiseAreaRoutes } from './modules/expertiseArea/http/routes';
+import { mentorExpertiseRoutes } from './modules/mentorExpertise/http/routes';
 
 export const app = fastify();
 
@@ -43,6 +44,10 @@ app.register(swagger, {
         name: 'Expertise Area',
         description: 'Expertise Area related endpoints',
       },
+      {
+        name: 'Mentor Expertise',
+        description: 'Mentor Expertise related endpoints',
+      },
     ],
   },
 });
@@ -62,6 +67,7 @@ app.register(authRoute);
 app.register(usersRoutes);
 app.register(rolesRoutes);
 app.register(expertiseAreaRoutes);
+app.register(mentorExpertiseRoutes);
 
 app.setErrorHandler((error, request, reply) => {
   if (error instanceof ZodError) {

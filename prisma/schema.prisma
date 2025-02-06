@@ -12,6 +12,7 @@ enum RoleType {
   MENTOR
   CONSULTANT
   ADMIN
+  MENTOR_CONSULTANT
 }
 
 enum PriceUnit {
