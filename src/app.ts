@@ -12,6 +12,7 @@ import { authRoute } from './modules/authentication/http/routes';
 import fastifyCors from '@fastify/cors';
 import { expertiseAreaRoutes } from './modules/expertiseArea/http/routes';
 import { mentorExpertiseRoutes } from './modules/mentorExpertise/http/routes';
+import { consultantExpertiseRoutes } from './modules/consultantExpertise/http/routes';
 
 export const app = fastify();
 
@@ -48,6 +49,10 @@ app.register(swagger, {
         name: 'Mentor Expertise',
         description: 'Mentor Expertise related endpoints',
       },
+      {
+        name: 'Consultant Expertise',
+        description: 'Consultant Expertise related endpoints',
+      },
     ],
   },
 });
@@ -68,6 +73,7 @@ app.register(usersRoutes);
 app.register(rolesRoutes);
 app.register(expertiseAreaRoutes);
 app.register(mentorExpertiseRoutes);
+app.register(consultantExpertiseRoutes);
 
 app.setErrorHandler((error, request, reply) => {
   if (error instanceof ZodError) {

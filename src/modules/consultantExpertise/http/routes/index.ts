@@ -1,85 +1,84 @@
 import { FastifyInstance } from 'fastify';
 import { verifyJwt } from '@/utils/middlewares/verify-jwt';
 import {
-  createMentorExpertiseController,
-  getAllMentorExpertiseController,
-  getMentorExpertiseByIdController,
-  deleteMentorExpertiseController,
+  createConsultantExpertiseController,
+  getAllConsultantExpertiseController,
+  getConsultantExpertiseByIdController,
 } from '../controller';
 
-export async function mentorExpertiseRoutes(app: FastifyInstance) {
+export async function consultantExpertiseRoutes(app: FastifyInstance) {
   app.addSchema({
-    $id: 'MentorExpertise',
+    $id: 'ConsultantExpertise',
     type: 'object',
     properties: {
       id: { type: 'string' },
-      mentorId: { type: 'string' },
+      consultantId: { type: 'string' },
       expertiseId: { type: 'string' },
     },
-    required: ['id', 'mentorId', 'expertiseId'],
+    required: ['id', 'consultantId', 'expertiseId'],
   });
 
   app.addHook('onRequest', verifyJwt);
 
   app.post(
-    '/mentor-expertise',
+    '/consultant-expertise',
     {
       schema: {
-        description: 'Creates a new Mentor Expertise',
-        tags: ['Mentor Expertise'],
+        description: 'Creates a new Consultant Expertise',
+        tags: ['Consultant Expertise'],
         body: {
           type: 'object',
           properties: {
-            mentorId: { type: 'string' },
+            consultant: { type: 'string' },
             expertiseId: { type: 'string' },
           },
-          required: ['mentorId', 'expertiseId'],
+          required: ['consultantId', 'expertiseId'],
         },
         response: {
           201: {
-            description: 'Mentor Expertise successfully created',
+            description: 'Consultant Expertise successfully created',
             type: 'object',
             properties: {
               message: { type: 'string' },
-              data: { $ref: 'MentorExpertise#' },
+              data: { $ref: 'ConsultantExpertise#' },
             },
           },
         },
       },
     },
-    createMentorExpertiseController,
+    createConsultantExpertiseController,
   );
 
   app.get(
-    '/mentor-expertise',
+    '/consultant-expertise',
     {
       schema: {
-        description: 'Lists all Mentor Expertise',
-        tags: ['Mentor Expertise'],
+        description: 'Lists all Consultant Expertise',
+        tags: ['Consultant Expertise'],
         response: {
           200: {
-            description: 'List of Mentor Expertise',
+            description: 'List of Consultant Expertise',
             type: 'object',
             properties: {
               total: { type: 'number' },
               data: {
                 type: 'array',
-                items: { $ref: 'MentorExpertise#' },
+                items: { $ref: 'ConsultantExpertise#' },
               },
             },
           },
         },
       },
     },
-    getAllMentorExpertiseController,
+    getAllConsultantExpertiseController,
   );
 
   app.get(
-    '/mentor-expertise/:id',
+    '/consultant-expertise/:id',
     {
       schema: {
-        description: 'Retrieves a Mentor Expertise by ID',
-        tags: ['Mentor Expertise'],
+        description: 'Retrieves a Consultant Expertise by ID',
+        tags: ['Consultant Expertise'],
         params: {
           type: 'object',
           properties: {
@@ -89,14 +88,14 @@ export async function mentorExpertiseRoutes(app: FastifyInstance) {
         },
         response: {
           200: {
-            description: 'Mentor Expertise details',
+            description: 'Consultant Expertise details',
             type: 'object',
             properties: {
-              data: { $ref: 'MentorExpertise#' },
+              data: { $ref: 'ConsultantExpertise#' },
             },
           },
           404: {
-            description: 'Mentor Expertise not found',
+            description: 'Consultant Expertise not found',
             type: 'object',
             properties: {
               message: { type: 'string' },
@@ -105,41 +104,6 @@ export async function mentorExpertiseRoutes(app: FastifyInstance) {
         },
       },
     },
-    getMentorExpertiseByIdController,
-  );
-
-  app.delete(
-    '/mentor-expertise/:mentorId/:expertiseId',
-    {
-      schema: {
-        description: 'Deletes a Mentor Expertise by Mentor ID and Expertise ID',
-        tags: ['Mentor Expertise'],
-        params: {
-          type: 'object',
-          properties: {
-            mentorId: { type: 'string' },
-            expertiseId: { type: 'string' },
-          },
-          required: ['mentorId', 'expertiseId'],
-        },
-        response: {
-          200: {
-            description: 'Mentor Expertise successfully deleted',
-            type: 'object',
-            properties: {
-              message: { type: 'string' },
-            },
-          },
-          404: {
-            description: 'Mentor Expertise not found',
-            type: 'object',
-            properties: {
-              message: { type: 'string' },
-            },
-          },
-        },
-      },
-    },
-    deleteMentorExpertiseController,
+    getConsultantExpertiseByIdController,
   );
 }

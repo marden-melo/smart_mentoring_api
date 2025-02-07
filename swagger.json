@@ -57,6 +57,26 @@
         "expertiseId"
       ],
       "title": "MentorExpertise"
+    },
+    "def-3": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "consultantId": {
+          "type": "string"
+        },
+        "expertiseId": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "consultantId",
+        "expertiseId"
+      ],
+      "title": "ConsultantExpertise"
     }
   },
   "paths": {
@@ -1308,6 +1328,120 @@
           }
         }
       }
+    },
+    "/consultant-expertise": {
+      "post": {
+        "description": "Creates a new Consultant Expertise",
+        "tags": [
+          "Consultant Expertise"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "consultant": {
+                  "type": "string"
+                },
+                "expertiseId": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "consultantId",
+                "expertiseId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Consultant Expertise successfully created",
+            "schema": {
+              "description": "Consultant Expertise successfully created",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "data": {
+                  "$ref": "#/definitions/def-3"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Lists all Consultant Expertise",
+        "tags": [
+          "Consultant Expertise"
+        ],
+        "responses": {
+          "200": {
+            "description": "List of Consultant Expertise",
+            "schema": {
+              "description": "List of Consultant Expertise",
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "number"
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/def-3"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/consultant-expertise/{id}": {
+      "get": {
+        "description": "Retrieves a Consultant Expertise by ID",
+        "tags": [
+          "Consultant Expertise"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "required": true,
+            "in": "path",
+            "name": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consultant Expertise details",
+            "schema": {
+              "description": "Consultant Expertise details",
+              "type": "object",
+              "properties": {
+                "data": {
+                  "$ref": "#/definitions/def-3"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Consultant Expertise not found",
+            "schema": {
+              "description": "Consultant Expertise not found",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "host": "localhost:3333",
@@ -1336,6 +1470,10 @@
     {
       "name": "Mentor Expertise",
       "description": "Mentor Expertise related endpoints"
+    },
+    {
+      "name": "Consultant Expertise",
+      "description": "Consultant Expertise related endpoints"
     }
   ]
 }

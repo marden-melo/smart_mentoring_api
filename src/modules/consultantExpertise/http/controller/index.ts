@@ -1,31 +1,34 @@
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { container } from 'tsyringe';
-import { mentorExpertiseSchema } from '../../validators/consultantExpertiseValidator';
-import { CreateMentorExpertiseUseCase } from '../../useCases/createConsultantExpertiseUseCase';
-import { GetAllMentorExpertiseUseCase } from '../../useCases/getAllConsultantExpertiseUseCase';
-import { GetMentorExpertiseByIdUseCase } from '../../useCases/getConsultantExpertiseByIdUseCase';
+import { consultantExpertiseSchema } from '../../validators/consultantExpertiseValidator';
+import { CreateConsultantExpertiseUseCase } from '../../useCases/createConsultantExpertiseUseCase';
+import { GetAllConsultantExpertiseUseCase } from '../../useCases/getAllConsultantExpertiseUseCase';
+import { GetConsultantExpertiseByIdUseCase } from '../../useCases/getConsultantExpertiseByIdUseCase';
 import { ResourceNotFoundError } from '@/utils/errors/resourceNotFoundError';
 import { DeleteMentorExpertiseUseCase } from '../../useCases/deleteMentorExpertiseUseCase';
 
-export async function createMentorExpertiseController(
+export async function createConsultantExpertiseController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
-    const { expertiseId, mentorId } = mentorExpertiseSchema.parse(request.body);
-
-    const createMentorExpertiseUseCase = container.resolve(
-      CreateMentorExpertiseUseCase,
+    const { expertiseId, consultantId } = consultantExpertiseSchema.parse(
+      request.body,
     );
 
-    const mentorExpertiseAreaData = await createMentorExpertiseUseCase.execute({
-      expertiseId,
-      mentorId,
-    });
+    const createConsultantExpertiseUseCase = container.resolve(
+      CreateConsultantExpertiseUseCase,
+    );
+
+    const consultantExpertiseAreaData =
+      await createConsultantExpertiseUseCase.execute({
+        expertiseId,
+        consultantId,
+      });
 
     reply.status(201).send({
       message: 'Expertise Area created successfully',
-      mentorExpertiseAreaData,
+      consultantExpertiseAreaData,
     });
   } catch (e) {
     const error = e as Error;
@@ -36,22 +39,20 @@ export async function createMentorExpertiseController(
   }
 }
 
-export async function getAllMentorExpertiseController(
+export async function getAllConsultantExpertiseController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
-    const getAllMentorExpertiseUseCase = container.resolve(
-      GetAllMentorExpertiseUseCase,
+    const getAllConsultantExpertiseUseCase = container.resolve(
+      GetAllConsultantExpertiseUseCase,
     );
-    const { data: mentorExpertise, total } =
-      await getAllMentorExpertiseUseCase.execute();
-
-    console.log(mentorExpertise);
+    const { data: consultantExpertise, total } =
+      await getAllConsultantExpertiseUseCase.execute();
 
     reply.status(200).send({
       total,
-      data: mentorExpertise,
+      data: consultantExpertise,
     });
   } catch (e) {
     console.error('Error caught:', e);
@@ -62,54 +63,24 @@ export async function getAllMentorExpertiseController(
   }
 }
 
-export async function getMentorExpertiseByIdController(
+export async function getConsultantExpertiseByIdController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   try {
     const { id } = request.params as { id: string };
 
-    const getMentorExpertiseByIdUseCase = container.resolve(
-      GetMentorExpertiseByIdUseCase,
+    const getConsultantExpertiseByIdUseCase = container.resolve(
+      GetConsultantExpertiseByIdUseCase,
     );
 
-    const mentorExpertise = await getMentorExpertiseByIdUseCase.execute(id);
+    const consultantExpertise =
+      await getConsultantExpertiseByIdUseCase.execute(id);
 
-    reply.status(200).send({ data: mentorExpertise });
+    reply.status(200).send({ data: consultantExpertise });
   } catch (e) {
     const error = e as Error;
     console.error('Error:', e);
-    if (e instanceof ResourceNotFoundError) {
-      return reply.status(404).send({ message: error.message });
-    }
-    reply
-      .status(500)
-      .send({ error: 'Internal server error', details: error.message });
-  }
-}
-
-export async function deleteMentorExpertiseController(
-  request: FastifyRequest,
-  reply: FastifyReply,
-) {
-  try {
-    const { mentorId, expertiseId } = request.params as {
-      mentorId: string;
-      expertiseId: string;
-    };
-
-    const deleteMentorExpertiseUseCase = container.resolve(
-      DeleteMentorExpertiseUseCase,
-    );
-
-    await deleteMentorExpertiseUseCase.execute(mentorId, expertiseId);
-
-    reply
-      .status(200)
-      .send({ message: 'Mentor Expertise deleted successfully' });
-  } catch (e) {
-    console.error('Error:', e);
-    const error = e as Error;
     if (e instanceof ResourceNotFoundError) {
       return reply.status(404).send({ message: error.message });
     }
